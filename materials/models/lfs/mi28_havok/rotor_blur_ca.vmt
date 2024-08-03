@@ -1,0 +1,8 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/lfs/mi28_havok/rotor_blur_ca"
+	"$halflambert" "1"	
+	"$translucent" "1"			
+	"$nocull" 1
+				
+}

@@ -1,0 +1,7 @@
+"VertexlitGeneric"
+{
+
+	"$basetexture" "models/lfs/mi28_havok/s8"
+	"$bumpmap" "models/lfs/mi28_havok/s8_nohq"
+	"$halflambert" "1"				
+}
