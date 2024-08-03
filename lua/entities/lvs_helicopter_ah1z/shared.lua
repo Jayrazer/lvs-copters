@@ -80,6 +80,31 @@ function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "SignalsEnabled" )
 end
 
+function ENT:GetAimAngles()
+	local Gun = self:GetAttachment( self:LookupAttachment( "muzzle" ) )
+
+	if not Gun then return end
+
+	local trace = self:GetEyeTrace()
+
+	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - Gun.Pos):GetNormalized():Angle() )
+
+	return AimAngles
+end
+
+function ENT:WeaponsInRange()
+	local AimAngles = self:GetAimAngles()
+
+	return math.abs( AimAngles.y ) < 40 and AimAngles.p < 90 and AimAngles.p > -20
+end
+
+function ENT:SetPoseParameterTurret()
+	local AimAngles = self:GetAimAngles()
+
+	self:SetPoseParameter("turret_yaw", -AimAngles.y )
+	self:SetPoseParameter("turret_pitch", AimAngles.p )
+end
+
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
@@ -101,16 +126,18 @@ local weapon = {}
 		local Muzzle = ent:GetAttachment ( ID )
 		if not Muzzle then return end
 		local effectdata = EffectData()
-		effectdata:SetOrigin( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
-		effectdata:SetNormal( ent:GetForward() )
+		effectdata:SetOrigin( Muzzle.Pos ) --( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
+		effectdata:SetNormal( Muzzle.Ang:Forward() ) --( ent:GetForward() )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 
- 	 	ent.FireLeft = not ent.FireLeft
+ 	 	ent.FireLeft = not ent.FireLeft	
+		
+	local trace = self:GetEyeTrace()
 			
-		local bullet = {}
-		bullet.Src 	= Muzzle.Pos --( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
-		bullet.Dir 	= Muzzle.Ang:Forward() --ent:GetForward()
+	local bullet = {}
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= ( trace.HitPos - Muzzle.Pos ):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
@@ -135,39 +162,44 @@ local weapon = {}
 		--weapon.OnSelect = function( ent ) ent:EmitSound("lvs_custom/ah6/select_minigun.wav") end
 	    weapon.OnOverheat = function( ent ) ent:EmitSound("30MM_STOP") end
 		end
-		self:AddWeapon( weapon )
+	
+	weapon.OnThink = function( ent, active )
+		ent:SetPoseParameterTurret()
+	end
+	
+	self:AddWeapon( weapon )
 	
 	
 	-- Hydras
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
 	weapon.Ammo = 76
-	weapon.Delay = 0.4
+	weapon.Delay = 0.2
 	weapon.HeatRateUp = 0
 	weapon.Attack = function( ent )
 
-		ent.FireLeft = not ent.FireLeft
+	ent.FireLeft = not ent.FireLeft
 
-		local Driver = ent:GetDriver()
-		local Target = ent:GetEyeTrace().HitPos
+	local Driver = ent:GetDriver()
+	local Target = ent:GetEyeTrace().HitPos
 
-		local projectile = ents.Create( "lvs_missile" )
-		projectile:SetPos( ent:LocalToWorld( Vector(19.36,65.89 * (self.FireLeft and 1 or -1),-13.39) ) )
-		projectile:SetAngles( ent:GetAngles() )
-		projectile:SetParent( ent )
-		projectile:Spawn()
-		projectile:Activate()
-		projectile.GetTarget = function( missile ) return missile end
-		projectile.GetTargetPos = function( missile )
-			if missile.HasReachedTarget then
-				return missile:LocalToWorld( Vector(100,0,0) )
-			end
+	local projectile = ents.Create( "lvs_missile" )
+	projectile:SetPos( ent:LocalToWorld( Vector(19.36,65.89 * (self.FireLeft and 1 or -1),-13.39) ) )
+	projectile:SetAngles( ent:GetAngles() )
+	projectile:SetParent( ent )
+	projectile:Spawn()
+	projectile:Activate()
+	projectile.GetTarget = function( missile ) return missile end
+	projectile.GetTargetPos = function( missile )
+	if missile.HasReachedTarget then
+		return missile:LocalToWorld( Vector(100,0,0) )
+	end
 
-			if (missile:GetPos() - Target):Length() < 100 then
-				missile.HasReachedTarget = true
-			end
-			return Target
+	if (missile:GetPos() - Target):Length() < 100 then
+			missile.HasReachedTarget = true
 		end
+		return Target
+	end
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
 		projectile:SetSpeed( ent:GetVelocity():Length() + 6000 )
