@@ -9,15 +9,15 @@ function ENT:OnSpawn( PObj )
 	DriverSeat:SetCameraHeight( 0 )
 	DriverSeat.HidePlayer = true
 	
-	local PassengerSeats = {
-		{
-			pos = Vector(133.898,0,1.513),
-			ang = Angle(0,-90,9.768)
-		}
-	}
-		for num, v in pairs( PassengerSeats ) do
-		local Pod = self:AddPassengerSeat( v.pos, v.ang )
-	end
+	--local PassengerSeats = {
+		--{
+			--pos = Vector(133.898,0,1.513),
+			--ang = Angle(0,-90,9.768)
+		--}
+	--}
+		--for num, v in pairs( PassengerSeats ) do
+		--local Pod = self:AddPassengerSeat( v.pos, v.ang )
+	--end
 
 	self:AddEngineSound( Vector(0,0,0) )
 

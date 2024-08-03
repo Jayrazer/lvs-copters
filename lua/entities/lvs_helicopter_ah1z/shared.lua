@@ -8,7 +8,7 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/lfs_merydian/helicopters/ah1z/viper.mdl"
-ENT.MDL_DESTROYED = 	"models/lfs_merydian/helicopters/ah1z/gibs/viper_1.mdl"
+--ENT.MDL_DESTROYED = 	"models/lfs_merydian/helicopters/ah1z/gibs/viper_1.mdl"
 
 ENT.AITEAM = 1
 
@@ -33,6 +33,7 @@ ENT.ForceAngleMultiplier = 1
 ENT.ForceAngleDampingMultiplier = 1
 
 ENT.GibModels = {
+	"models/lfs_merydian/helicopters/ah1z/gibs/viper_1.mdl",
 	"models/combine_apc_destroyed_gib04.mdl",
 	"models/combine_apc_destroyed_gib03.mdl",
 	"models/props_phx/misc/propeller2x_small.mdl",
