@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+
+$basetexture					"models\lfs\wt\bo105_1a1/mesh1_a"
+
+$alphatest 1
+
+
+}

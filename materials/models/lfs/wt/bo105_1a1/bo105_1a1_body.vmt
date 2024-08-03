@@ -1,0 +1,17 @@
+"VertexLitGeneric"
+{
+
+$basetexture				"models\lfs\wt\bo105_1a1/bo105pah1_a1_green_c"
+$bumpmap					"models\lfs\wt\bo105_1a1/bo105pah1_a1_green_n"
+$envmap 					"env_cubemap"
+$normalmapalphaenvmapmask 	1
+$envmaptint 				"[0.02 0.02 0.02]"
+$phong 						1
+$phongfresnelranges 		"[0.9 0.9 1]"
+$phongtint 					"[0.9 0.9 1]"
+$phongexponent 				10
+$phongboost 				5
+$phongalbedoboost 			1
+
+
+}

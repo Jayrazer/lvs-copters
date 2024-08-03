@@ -1,0 +1,15 @@
+"VertexLitGeneric"
+{
+
+$basetexture					"models\lfs\wt\bo105_1a1/glass"
+$bumpmap					"models\lfs\wt\bo105_1a1/normal"
+
+	"$halflambert" "1"	
+	"$translucent" "1"			
+
+	"$phong" "1"						
+	"$phongexponent" "22"
+	"$phongboost" "12"						
+	"$phongfresnelranges"	"[ .2 1.2 8]"				
+
+}

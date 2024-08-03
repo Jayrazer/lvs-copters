@@ -1,0 +1,16 @@
+"VertexLitGeneric"
+{
+
+$basetexture				"models\lfs\wt\bo105_1a1/common_bomber_gauges_usa_c"
+$bumpmap					"models\lfs\wt\bo105_1a1/normal"
+$envmap 					"env_cubemap"
+$normalmapalphaenvmapmask 	1
+$envmaptint 				"[0.01 0.01 0.01]"
+$phong 						1
+$phongfresnelranges 		"[0.9 0.9 1]"
+$phongtint 					"[0.9 0.9 1]"
+$phongexponent 				12
+$phongboost 				3
+$phongalbedoboost 			1
+
+}
