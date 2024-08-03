@@ -137,7 +137,7 @@ local weapon = {}
 			
 	local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= ( trace.HitPos - Muzzle.Pos ):GetNormalized()
+		bullet.Dir 	= Muzzle.Ang:Forward() --( trace.HitPos - Muzzle.Pos ):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10

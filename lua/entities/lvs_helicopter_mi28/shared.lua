@@ -80,6 +80,31 @@ function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "SignalsEnabled" )
 end
 
+function ENT:GetAimAngles()
+	local Gun = self:GetAttachment( self:LookupAttachment( "muzzle" ) )
+
+	if not Gun then return end
+
+	local trace = self:GetEyeTrace()
+
+	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - Gun.Pos):GetNormalized():Angle() )
+
+	return AimAngles
+end
+
+function ENT:WeaponsInRange()
+	local AimAngles = self:GetAimAngles()
+
+	return math.abs( AimAngles.y ) < 40 and AimAngles.p < 90 and AimAngles.p > -20
+end
+
+function ENT:SetPoseParameterTurret()
+	local AimAngles = self:GetAimAngles()
+
+	self:SetPoseParameter("turret_yaw", -AimAngles.y )
+	self:SetPoseParameter("turret_pitch", AimAngles.p )
+end
+
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
@@ -135,6 +160,11 @@ local weapon = {}
 		--weapon.OnSelect = function( ent ) ent:EmitSound("lvs_custom/ah6/select_minigun.wav") end
 	    weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
 		end
+		
+	weapon.OnThink = function( ent, active )
+		ent:SetPoseParameterTurret()
+	end
+		
 		self:AddWeapon( weapon )
 	
 	
