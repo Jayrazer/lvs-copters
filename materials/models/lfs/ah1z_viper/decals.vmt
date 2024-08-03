@@ -1,0 +1,7 @@
+"VertexlitGeneric"
+{
+
+	"$basetexture" "models/lfs/ah1z_viper/decals"
+	"$halflambert" "1"		
+	"$translucent" "1"
+}

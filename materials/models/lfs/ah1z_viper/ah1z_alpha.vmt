@@ -1,0 +1,12 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\lfs\ah1z_viper\ah1z_translucent"
+	"$bumpmap" "models\lfs\mi28_havok\normal"
+	"$halflambert" "1"	
+	"$translucent" "1"			
+
+	"$phong" "1"						
+	"$phongexponent" "70"
+	"$phongboost" "1"						
+	"$phongfresnelranges"	"[ .2 1.2 8]"					
+}

@@ -1,0 +1,11 @@
+vertexLitGeneric
+{
+	"$basetexture" "models/lfs/ah1z_viper/r_pod"
+	"$surfaceprop" "metal"
+	"$bumpmap"	"models/lfs/ah1z_viper/r_pod_n"
+	"$phong" "1"
+	"$phongexponent" "5"
+	"$phongboost" "0.1"	
+	"$phongfresnelranges"	"[2 3 3]"
+	"$selfillum" 0
+}

@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/lfs/ah1z_viper/aim9"
+	"$bumpmap"    "models/lfs/ah1z_viper/aim9_bump"
+    $envmap "env_cubemap"
+    $nocull 0
+    $envmaptint "[0.02 0.02 0.02]"
+    $envmapfresnel "1"
+	"$normalmapalphaenvmapmask" "1"
+    $phong "1"
+    $phongexponent "50"
+    $phongboost "3"
+    $phongfresnelranges "[.05 .3 1]"
+}
