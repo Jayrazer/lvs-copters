@@ -21,7 +21,7 @@ function ENT:OnSpawn( PObj )
 		local Pod = self:AddPassengerSeat( v.pos, v.ang )
 	end
 
-	self:AddEngineSound( Vector(0,0,0) )
+	self:AddEngineSound( Vector(0,0,30) )
 
 	--self:AddRotor( pos, angle, radius, turn_speed_and_direction )
 	self.Rotor = self:AddRotor( Vector(0,0,60), Angle(0,0,0), 200, -400 )
@@ -72,9 +72,7 @@ end
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
-		self:EmitSound( "lvs_custom/shared/light_heli_start.wav" )
-		else
-		self:EmitSound( "lvs_custom/shared/heli_shutdown.wav" )
+		self:EmitSound( "lvs/vehicles/helicopter/start.wav" )
 	end
 end
 

@@ -151,19 +151,19 @@ local weapon = {}
 		bullet.Src 	= Muzzle.Pos --( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
-		bullet.TracerName = "lvs_tracer_orange"
+		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= 10
 		bullet.HullSize 	= 15
 		bullet.Damage	= 18
 		bullet.Velocity = 10000
-		bullet.SplashDamage = 16
-		bullet.SplashDamageRadius = 30
+		bullet.SplashDamage = 20
+		bullet.SplashDamageRadius = 45
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
 		effectdata:SetOrigin( tr.HitPos )
 		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_bullet_impact", effectdata, true, true )
+		util.Effect( "lvs_custom_30mm_impact", effectdata, true, true )
 	end
 
 		ent:LVSFireBullet( bullet )
@@ -186,7 +186,7 @@ local weapon = {}
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
 	weapon.Ammo = 50
-	weapon.Delay = 0.3
+	weapon.Delay = 0.18
 	weapon.HeatRateUp = 0
 	weapon.Attack = function( ent )
 
@@ -196,29 +196,18 @@ local weapon = {}
 		local Target = ent:GetEyeTrace().HitPos
 
 		local projectile = ents.Create( "lvs_missile" )
-		projectile:SetPos( ent:LocalToWorld( Vector(19.36,65.89 * (self.FireLeft and 1 or -1),-13.39) ) )
-		projectile:SetAngles( ent:GetAngles() )
-		projectile:SetParent( ent )
-		projectile:Spawn()
-		projectile:Activate()
-		projectile.GetTarget = function( missile ) return missile end
-		projectile.GetTargetPos = function( missile )
-			if missile.HasReachedTarget then
-				return missile:LocalToWorld( Vector(100,0,0) )
-			end
-
-			if (missile:GetPos() - Target):Length() < 100 then
-				missile.HasReachedTarget = true
-			end
-			return Target
-		end
-		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
-		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( ent:GetVelocity():Length() + 4000 )
-		projectile:SetDamage( 600 )
-		projectile:SetRadius( 350 )
-		projectile:Enable()
-		projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
+			projectile:SetPos( ent:LocalToWorld( Vector(19.36,65.89 * (self.FireLeft and 1 or -1),-13.39) ) )
+			projectile:SetAngles( ent:GetAngles() )
+			projectile:SetParent( ent )
+			projectile:Spawn()
+			projectile:Activate()
+			projectile:SetAttacker( IsValid( Driver ) and Driver or self )
+			projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+			projectile:SetSpeed( ent:GetVelocity():Length() + 4000 )
+			projectile:SetDamage( 600 )
+			projectile:SetRadius( 350 )
+			projectile:Enable()
+			projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
 
 		ent:TakeAmmo()
 	end

@@ -88,10 +88,10 @@ local weapon = {}
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.StartAttack = function( ent )
-    ent.GunSound = ent:StartLoopingSound("30MM_LOOP")
+    ent.GunSound = ent:StartLoopingSound("GUNPODS_LOOP")
 	end
 	weapon.FinishAttack = function( ent )
-    ent:EmitSound("30MM_STOP")
+    ent:EmitSound("GUNPODS_STOP")
     ent:StopLoopingSound( ent.GunSound )
 	end
 	
