@@ -94,8 +94,8 @@ end
 
 function ENT:WeaponsInRange()
 	local AimAngles = self:GetAimAngles()
-
-	return math.abs( AimAngles.y ) < 40 and AimAngles.p < 90 and AimAngles.p > -20
+	
+	return math.abs( AimAngles.y ) < 92 and AimAngles.p < 62 and AimAngles.p > -22
 end
 
 function ENT:SetPoseParameterTurret()
@@ -113,29 +113,43 @@ local weapon = {}
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.17
 	weapon.StartAttack = function( ent )
-    ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
+		ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
 	end
+	
 	weapon.FinishAttack = function( ent )
-    ent:EmitSound("MI28_30MM_STOP")
-    ent:StopLoopingSound( ent.GunSound )
+		if !ent:WeaponsInRange() then return end
+		ent:EmitSound("MI28_30MM_STOP")
+		ent:StopLoopingSound( ent.GunSound )
 	end
 	
 	
 	weapon.Attack = function( ent )
+	
+		if !ent:WeaponsInRange() then
+		
+			ent:StopLoopingSound( ent.GunSound )
+		
+			return true
+		end
+		
+		ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
+	
 		local ID = ent:LookupAttachment( "muzzle" )
 		local Muzzle = ent:GetAttachment ( ID )
 		if not Muzzle then return end
 		local effectdata = EffectData()
-		effectdata:SetOrigin( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
-		effectdata:SetNormal( ent:GetForward() )
+		effectdata:SetOrigin( Muzzle.Pos )
+		effectdata:SetNormal( Muzzle.Ang:Forward() )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 
  	 	ent.FireLeft = not ent.FireLeft
+		
+		local trace = self:GetEyeTrace()
 			
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos --( ent:LocalToWorld( Vector(250.005,0.804,-25.79) ) )
-		bullet.Dir 	= Muzzle.Ang:Forward() --ent:GetForward()
+		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10

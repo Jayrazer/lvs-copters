@@ -94,8 +94,8 @@ end
 
 function ENT:WeaponsInRange()
 	local AimAngles = self:GetAimAngles()
-
-	return math.abs( AimAngles.y ) < 40 and AimAngles.p < 90 and AimAngles.p > -20
+	
+	return math.abs( AimAngles.y ) < 102 and AimAngles.p < 62 and AimAngles.p > -22
 end
 
 function ENT:SetPoseParameterTurret()
@@ -113,15 +113,25 @@ local weapon = {}
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.2
 	weapon.StartAttack = function( ent )
-    ent.GunSound = ent:StartLoopingSound("30MM_LOOP")
+		ent.GunSound = ent:StartLoopingSound("30MM_LOOP")
 	end
 	weapon.FinishAttack = function( ent )
-    ent:EmitSound("30MM_STOP")
-    ent:StopLoopingSound( ent.GunSound )
+		if !ent:WeaponsInRange() then return end
+		ent:EmitSound("30MM_STOP")
+		ent:StopLoopingSound( ent.GunSound )
 	end
 	
 	
 	weapon.Attack = function( ent )
+		if !ent:WeaponsInRange() then
+		
+			ent:StopLoopingSound( ent.GunSound )
+		
+			return true
+		end
+		
+		ent.GunSound = ent:StartLoopingSound("30MM_LOOP")
+		
 		local ID = ent:LookupAttachment( "muzzle" )
 		local Muzzle = ent:GetAttachment ( ID )
 		if not Muzzle then return end
@@ -137,7 +147,7 @@ local weapon = {}
 			
 	local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= Muzzle.Ang:Forward() --( trace.HitPos - Muzzle.Pos ):GetNormalized()
+		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
@@ -215,45 +225,5 @@ local weapon = {}
 		--ent:EmitSound("lvs_custom/ah6/select_missile.wav")
 	end
 	self:AddWeapon( weapon )
-	
-	
-	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/light.png")
-	weapon.UseableByAI = false
-	weapon.Ammo = -1
-	weapon.Delay = 0
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 1
-	weapon.StartAttack = function( ent )
-		if not ent.SetLightsEnabled then return end
 
-		if ent:GetAI() then return end
-
-		ent:SetLightsEnabled( not ent:GetLightsEnabled() )
-		ent:EmitSound( "items/flashlight1.wav", 75, 105 )
-	end
-		weapon.OnSelect = function( ent )
-		ent:EmitSound("lvs_custom/ah6/select_light.wav")
-	end
-	--self:AddWeapon( weapon )
-	
-	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/wing_light.png")
-	weapon.UseableByAI = false
-	weapon.Ammo = -1
-	weapon.Delay = 0
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 1
-	weapon.StartAttack = function( ent )
-		if not ent.SetSignalsEnabled then return end
-
-		if ent:GetAI() then return end
-
-		ent:SetSignalsEnabled( not ent:GetSignalsEnabled() )
-		ent:EmitSound( "buttons/lightswitch2.wav", 75, 105 )
-	end
-		weapon.OnSelect = function( ent )
-		ent:EmitSound("lvs_custom/ah6/select_signal.wav")
-	end
-	--self:AddWeapon( weapon )
 end
