@@ -4,7 +4,7 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat = self:AddDriverSeat( Vector(48.898,15,-15.513), Angle(0,-90,9.768) )
+	local DriverSeat = self:AddDriverSeat( Vector(48.898,-15,-15.513), Angle(0,-90,9.768) )
 	DriverSeat:SetCameraDistance( -0.2 )
 	DriverSeat:SetCameraHeight( 0 )
 	DriverSeat.HidePlayer = false
@@ -13,7 +13,7 @@ function ENT:OnSpawn( PObj )
 	
 	local PassengerSeats = {
 		{
-			pos = Vector(48.898,-15,-15.513),
+			pos = Vector(48.898,15,-15.513),
 			ang = Angle(0,-90,9.768)
 		}
 	}

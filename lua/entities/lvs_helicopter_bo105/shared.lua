@@ -14,7 +14,7 @@ ENT.AITEAM = 1
 
 ENT.MaxHealth = 250
 
-ENT.MaxVelocity = 2550
+ENT.MaxVelocity = 2800
 
 ENT.ThrustUp = 1.4
 ENT.ThrustDown = 0.8
@@ -23,9 +23,9 @@ ENT.ThrustRate = 0.9
 ENT.ThrottleRateUp = 0.15
 ENT.ThrottleRateDown = 0.1
 
-ENT.TurnRatePitch = 1.1
-ENT.TurnRateYaw = 1.4
-ENT.TurnRateRoll = 1.1
+ENT.TurnRatePitch = 1.6
+ENT.TurnRateYaw = 2.2
+ENT.TurnRateRoll = 1.6
 
 ENT.ForceLinearDampingMultiplier = 1.4
 
