@@ -35,7 +35,7 @@ function ENT:OnSpawn( PObj )
     self.TailRotor:SetHP( 30 )
     function self.TailRotor:OnDestroyed( rotor )
         local id = rotor:LookupBone( "rotor_tail" )
-        rotor:ManipulateBoneScale( id, Vector( 0, 0, 0 ) )
+        --rotor:ManipulateBoneScale( id, Vector( 0, 0, 0 ) )
         rotor:EmitSound( "physics/metal/metal_box_break2.wav" )
         rotor:DestroySteering( -2.5 )
     end
