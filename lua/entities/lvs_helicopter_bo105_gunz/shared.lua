@@ -12,7 +12,7 @@ ENT.MDL = "models/lfs_merydian/wt_helicopters/bo105_1a1.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 250
+ENT.MaxHealth = 300
 
 ENT.MaxVelocity = 2550
 
