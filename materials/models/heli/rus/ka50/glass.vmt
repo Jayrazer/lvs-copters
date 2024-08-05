@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$additive" 0
+
+	"$basetexture" "models/heli/rus/ka50/glass"
+	"$bumpmap" "models/heli/rus/ka50/glass_n"
+	"$color2" "[1 1 1]"
+	"$translucent" "1"
+	"$halflambert" 1
+	"$nocull" "1"
+	"$model" 1
+	
+	"$phong" "1"
+	"$phongexponent" "30"
+	"$phongboost" "0.1"
+	"$phongfresnelranges"	"[ 8 4 8 ]"
+}

@@ -1,0 +1,14 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/heli/rus/ka50/rotor_blur"
+	"$bumpmap" "null-bumpmap"
+	"$halflambert" "1"					
+	"$nocull" 0
+	"$translucent" 1 
+	"$nodecal" 1
+	
+	"$phong" "1"
+	"$phongboost" "1"
+	"$PhongExponent" "15"
+	"$phongfresnelranges" "[3 5 7]"
+}

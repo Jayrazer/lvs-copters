@@ -1,0 +1,14 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/heli/rus/ka50/pods"
+	"$bumpmap" "null-bumpmap"
+	"$halflambert" "1"				
+	"$nocull" 0
+	"$nodecal" 1
+	"$selfillum" "0"
+	
+	"$phong" "1"
+	"$phongboost"	"1" 		
+	"$phongexponent" "15"
+	"$phongfresnelranges"	"[0.3 1 4]"
+}
