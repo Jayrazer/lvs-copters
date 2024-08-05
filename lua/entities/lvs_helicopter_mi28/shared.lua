@@ -4,6 +4,9 @@ ENT.Base = "lvs_base_helicopter"
 ENT.PrintName = "Mi-28NM \"Havoc\""
 ENT.Category = "[LVS] - Helicopters"
 
+ENT.VehicleCategory = "Helicopters"
+ENT.VehicleSubCategory = "Heli Wars"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
@@ -189,9 +192,9 @@ local weapon = {}
 		self:AddWeapon( weapon )
 	
 	
-	-- Hydras
+	-- rockets
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Icon = Material("lvs/weapons/bomb.png")
 	weapon.Ammo = 50
 	weapon.Delay = 0.18
 	weapon.HeatRateUp = 0
@@ -211,8 +214,8 @@ local weapon = {}
 			projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 			projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
 			projectile:SetSpeed( ent:GetVelocity():Length() + 4000 )
-			projectile:SetDamage( 600 )
-			projectile:SetRadius( 350 )
+			projectile:SetDamage( 300 )
+			projectile:SetRadius( 250 )
 			projectile:Enable()
 			projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
 
@@ -224,44 +227,69 @@ local weapon = {}
 	end
 	self:AddWeapon( weapon )
 	
-	
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/light.png")
-	weapon.UseableByAI = false
-	weapon.Ammo = -1
-	weapon.Delay = 0
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 1
-	weapon.StartAttack = function( ent )
-		if not ent.SetLightsEnabled then return end
+	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Ammo = 15
+	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
+	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
+	weapon.HeatRateDown = 0.25
+	weapon.Attack = function( ent )
+		local T = CurTime()
 
-		if ent:GetAI() then return end
+		if IsValid( ent._Missile ) then
+			if (ent._nextMissleTracking or 0) > T then return end
 
-		ent:SetLightsEnabled( not ent:GetLightsEnabled() )
-		ent:EmitSound( "items/flashlight1.wav", 75, 105 )
-	end
-		weapon.OnSelect = function( ent )
-		ent:EmitSound("lvs_custom/ah6/select_light.wav")
-	end
-	--self:AddWeapon( weapon )
-	
-	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/wing_light.png")
-	weapon.UseableByAI = false
-	weapon.Ammo = -1
-	weapon.Delay = 0
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 1
-	weapon.StartAttack = function( ent )
-		if not ent.SetSignalsEnabled then return end
+			ent._nextMissleTracking = T + 0.1 -- 0.1 second interval because those find functions can be expensive
 
-		if ent:GetAI() then return end
+			ent._Missile:FindTarget( ent:GetPos(), ent:GetForward(), 30, 7500 )
 
-		ent:SetSignalsEnabled( not ent:GetSignalsEnabled() )
-		ent:EmitSound( "buttons/lightswitch2.wav", 75, 105 )
+			return
+		end
+
+		local T = CurTime()
+
+		if (ent._nextMissle or 0) > T then return end
+
+		ent._nextMissle = T + 0.5
+
+		ent._swapMissile = not ent._swapMissile
+
+		local Pos = Vector( 90, (ent._swapMissile and -104 or 104), -32 )
+
+		local Driver = self:GetDriver()
+
+		local projectile = ents.Create( "lvs_missile" )
+		projectile:SetPos( ent:LocalToWorld( Pos ) )
+		projectile:SetAngles( ent:LocalToWorldAngles( Angle(0,ent._swapMissile and 2 or -2,0) ) )
+		projectile:SetParent( ent )
+		projectile:Spawn()
+		projectile:Activate()
+		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
+		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+
+		ent._Missile = projectile
+
+		ent:SetNextAttack( CurTime() + 0.1 ) -- wait 0.1 second before starting to track
 	end
-		weapon.OnSelect = function( ent )
-		ent:EmitSound("lvs_custom/ah6/select_signal.wav")
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent._Missile ) then return end
+
+		local projectile = ent._Missile
+
+		projectile:Enable()
+		projectile:EmitSound( "weapons/stinger_fire1.wav", 125 )
+		ent:TakeAmmo()
+
+		ent._Missile = nil
+
+		local NewHeat = ent:GetHeat() + 0.75
+
+		ent:SetHeat( NewHeat )
+		if NewHeat >= 1 then
+			ent:SetOverheated( true )
+		end
 	end
-	--self:AddWeapon( weapon )
+	weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
+	self:AddWeapon( weapon )
 end
