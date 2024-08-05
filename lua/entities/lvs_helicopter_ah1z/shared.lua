@@ -179,7 +179,9 @@ local weapon = {}
 		ent:TakeAmmo( 1 )
 		
 		
-		--weapon.OnSelect = function( ent ) ent:EmitSound("lvs_custom/ah6/select_minigun.wav") end
+		weapon.OnSelect = function( ent ) 
+			ent:EmitSound("weapons/shotgun/shotgun_cock.wav") 
+		end
 	    weapon.OnOverheat = function( ent ) ent:EmitSound("30MM_STOP") end
 		end
 	
@@ -221,7 +223,7 @@ local weapon = {}
 	end
 	
 	weapon.OnSelect = function( ent )
-		--ent:EmitSound("lvs_custom/ah6/select_missile.wav")
+		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
 	end
 	self:AddWeapon( weapon )
 	
@@ -268,7 +270,7 @@ local weapon = {}
 	end
 	
 	weapon.OnSelect = function( ent )
-		--ent:EmitSound("lvs_custom/ah6/select_missile.wav")
+		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
 	end
 	self:AddWeapon( weapon )
 
