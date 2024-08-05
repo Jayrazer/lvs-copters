@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_helicopter"
 
-ENT.PrintName = "Mi-28NM \"Havoc\""
+ENT.PrintName = "Mi-28N \"Havoc\""
 ENT.Category = "[LVS] - Helicopters"
 
 ENT.VehicleCategory = "Helicopters"
