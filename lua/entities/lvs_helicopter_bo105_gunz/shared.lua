@@ -115,9 +115,20 @@ local weapon = {}
 
  	 	 	ent.FireLeft = not ent.FireLeft
 			
+		local pod = ent:GetDriverSeat()
+		if not IsValid( pod ) then return end
+		local startpos = pod:LocalToWorld( pod:OBBCenter() )
+		local trace = util.TraceHull( {
+			start = startpos,
+			endpos = (startpos + ent:GetForward() * 50000),
+			mins = Vector( -10, -10, -10 ),
+			maxs = Vector( 10, 10, 10 ),
+			filter = ent:GetCrosshairFilterEnts()
+		} )
+			
 		local bullet = {}
 		bullet.Src 	= ( ent:LocalToWorld( Vector(37.005,61.804 * (self.FireLeft and 1 or -1),-23.79) ) )
-		bullet.Dir 	= ent:GetForward()
+		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
