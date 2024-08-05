@@ -4,6 +4,9 @@ ENT.Base = "lvs_base_helicopter"
 ENT.PrintName = "Bo 105 PAH-1A1 (Gunpods)"
 ENT.Category = "[LVS] - Helicopters"
 
+ENT.VehicleCategory = "Helicopters"
+ENT.VehicleSubCategory = "Heli Wars"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
