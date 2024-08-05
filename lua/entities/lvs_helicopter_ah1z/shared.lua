@@ -258,7 +258,7 @@ local weapon = {}
 		end
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( ent:GetVelocity():Length() + 6000 )
+		projectile:SetSpeed( ent:GetVelocity():Length() + 2000 )
 		projectile:SetDamage( 600 )
 		projectile:SetRadius( 550 )
 		projectile:Enable()
@@ -276,7 +276,7 @@ local weapon = {}
 	--sidewinder
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 5
+	weapon.Ammo = 6
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.25
