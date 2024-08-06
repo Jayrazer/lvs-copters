@@ -163,43 +163,56 @@ local weapon = {}
 	
 	-- Hydras
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/bomb.png")
-	weapon.Ammo = 50
+		weapon.Icon = Material("lvs/weapons/rocket.png")
+	weapon.Ammo = 40
 	weapon.Delay = 0.2
 	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	
 	weapon.Attack = function( ent )
 
-	ent.FireLeft = not ent.FireLeft
-
-	local Driver = ent:GetDriver()
-	local Target = ent:GetEyeTrace().HitPos
-
-	local projectile = ents.Create( "lvs_missile" )
-		projectile:SetPos( ent:LocalToWorld( Vector(19.36,85.89 * (self.FireLeft and 1 or -1),45.39) ) )
-		projectile:SetAngles( ent:GetAngles() )
-		projectile:SetParent( ent )
-		projectile:Spawn()
-		projectile:Activate()
-		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
-		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( ent:GetVelocity():Length() + 6000 )
-		projectile:SetDamage( 200 )
-		projectile:SetRadius( 250 )
-		projectile:Enable()
-		projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
-
-		ent:TakeAmmo()
+		local pod = ent:GetDriverSeat()
+		if not IsValid( pod ) then return end
+		
+		ent.FireLeft = not ent.FireLeft
+			
+		local bullet = {}
+		bullet.Src 	= ( ent:LocalToWorld( Vector(19.36,80.89 * (self.FireLeft and 1 or -1),45.39) ) )
+		bullet.Dir 	= ent:GetForward()
+		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
+		bullet.TracerName = "lvs_tracer_missile"
+		bullet.Force	= 10000
+		bullet.HullSize 	= 15
+		bullet.Damage	= 400
+		bullet.Velocity = 5000
+		bullet.SplashDamage = 200
+		bullet.SplashDamageRadius = 200
+		bullet.SplashDamageType = DMG_BLAST
+		bullet.Attacker 	= ent:GetDriver()
+		
+		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
+		
+		bullet.Callback = function(att, tr, dmginfo)
+		local effectdata = EffectData()
+		effectdata:SetOrigin( tr.HitPos )
+		effectdata:SetNormal( tr.HitNormal )
+		util.Effect( "lvs_explosion_small", effectdata, true, true )
 	end
-	
-	weapon.OnSelect = function( ent )
-		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
-	end
-	self:AddWeapon( weapon )
+
+		ent:LVSFireBullet( bullet )
+
+		ent:TakeAmmo( 1 )
+		
+		
+		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
+		end
+		self:AddWeapon( weapon )
 	
 
 	-- hellfire
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Icon = Material("lvs/weapons/bomb.png")
 	weapon.Ammo = 20
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
