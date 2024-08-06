@@ -1,74 +1,3 @@
--- Landing gear logic from planes base
-function ENT:HandleLandingGear( Rate )
-
-	local EnableBrakes = self:GetThrottle() <= 0
-
-	local Cur = self:GetLandingGear()
-
-	if self.WheelAutoRetract then
-		if self:HitGround() then
-			self.LandingGearUp = false
-		else
-			self.LandingGearUp = self:GetStability() > 0.4
-		end
-	end
-
-	local New = Cur + math.Clamp((self.LandingGearUp and 0 or 1) - Cur,-Rate,Rate)
-
-	local SetValue = Cur ~= New
-
-	if SetValue then
-		self:SetLandingGear( New )
-	end
-
-	for _, data in pairs( self:GetWheels() ) do
-		local wheel = data.entity
-		local mass = data.mass
-		local physobj = data.physobj
-
-		if not IsValid( wheel ) or not IsValid( physobj ) then continue end
-
-		wheel:SetBrakes( EnableBrakes )
-
-		if not SetValue then continue end
-
-		physobj:SetMass( 1 + (mass - 1) * New ^ 4 )
-	end
-end
-
-function ENT:ToggleLandingGear()
-	if self.WheelAutoRetract then return end
-
-	self.LandingGearUp = not self.LandingGearUp
-
-	self:OnLandingGearToggled( self.LandingGearUp )
-end
-
-function ENT:RaiseLandingGear()
-	if self.WheelAutoRetract then return end
-
-	if not self.LandingGearUp then
-		self.LandingGearUp = true
-		
-		self:OnLandingGearToggled( self.LandingGearUp )
-	end
-end
-
-function ENT:DeployLandingGear()
-	if self.WheelAutoRetract then return end
-
-	if self.LandingGearUp then
-		self.LandingGearUp = false
-		
-		self:OnLandingGearToggled( self.LandingGearUp )
-	end
-end
-
-function ENT:OnLandingGearToggled( IsDeployed )
-end
-
-
---wheel logic
 
 ENT.WheelSteerAngle = 45
 
@@ -159,11 +88,15 @@ function ENT:GetWheels()
 	return self._lvsWheels
 end
 
-function ENT:AddWheel( pos, radius, mass, type )
+function ENT:AddWheel( pos, radius, mass, type, canRetract )
 	if not isvector( pos ) or not isnumber( radius ) or not isnumber( mass ) then return end
 
 	if not type then
 		type = LVS.WHEEL_BRAKE
+	end
+	
+	if canRetract == nil then
+		canRetract = true
 	end
 
 	local wheel = ents.Create( "lvs_helicopter_wheel" )
@@ -210,16 +143,11 @@ function ENT:AddWheel( pos, radius, mass, type )
 	self:TransferCPPI( wheel )
 
 	if type == LVS.WHEEL_STEER_NONE then
-		local ballsocket = constraint.AdvBallsocket(wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 1)
-		ballsocket.DoNotDuplicate = true
-		self:TransferCPPI( ballsocket )
+		self:TransferCPPI( constraint.AdvBallsocket(wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 1) )
 	end
 
 	if type == LVS.WHEEL_BRAKE then
-		local axis = constraint.Axis( wheel, self, 0, 0, PhysObj:GetMassCenter(), wheel:GetPos(), 0, 0, 0, 0, Vector(1,0,0) , false )
-		axis.DoNotDuplicate = true
-		self:TransferCPPI( axis )
-
+		self:TransferCPPI( constraint.Axis( wheel, self, 0, 0, PhysObj:GetMassCenter(), wheel:GetPos(), 0, 0, 0, 0, Vector(1,0,0) , false ) )
 		wheel:SetBrakes( true )
 	end
 
@@ -228,13 +156,8 @@ function ENT:AddWheel( pos, radius, mass, type )
 
 		local SteerMaster = self:AddWheelSteeringPlate( false )
 
-		local ballsocket1 = constraint.AdvBallsocket(wheel, SteerMaster,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -0.01, -0.01, 180, 0.01, 0.01, 0, 0, 0, 1, 0)
-		ballsocket1.DoNotDuplicate = true
-		self:TransferCPPI( ballsocket1 )
-
-		local ballsocket2 = constraint.AdvBallsocket(wheel,self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 0)
-		ballsocket2.DoNotDuplicate = true
-		self:TransferCPPI( ballsocket2 )
+		self:TransferCPPI( constraint.AdvBallsocket(wheel, SteerMaster,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -0.01, -0.01, 180, 0.01, 0.01, 0, 0, 0, 1, 0) )
+		self:TransferCPPI( constraint.AdvBallsocket(wheel,self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 0) )
 	end
 
 	if type == LVS.WHEEL_STEER_REAR then
@@ -242,19 +165,11 @@ function ENT:AddWheel( pos, radius, mass, type )
 
 		local SteerMaster = self:AddWheelSteeringPlate( true )
 
-		
-		local ballsocket1 = constraint.AdvBallsocket(wheel, SteerMaster,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -0.01, -0.01, 180, 0.01, 0.01, 0, 0, 0, 1, 0)
-		ballsocket1.DoNotDuplicate = true
-		self:TransferCPPI( ballsocket1 )
-
-		local ballsocket2 = constraint.AdvBallsocket(wheel,self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 0)
-		ballsocket2.DoNotDuplicate = true
-		self:TransferCPPI( ballsocket2 )
+		self:TransferCPPI( constraint.AdvBallsocket(wheel, SteerMaster,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -0.01, -0.01, 180, 0.01, 0.01, 0, 0, 0, 1, 0) )
+		self:TransferCPPI( constraint.AdvBallsocket(wheel,self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -180, -180, 180, 180, 180, 0, 0, 0, 0, 0) )
 	end
 
-	local nocollide = constraint.NoCollide( wheel, self, 0, 0 )
-	nocollide.DoNotDuplicate = true
-	self:TransferCPPI( nocollide )
+	self:TransferCPPI( constraint.NoCollide( wheel, self, 0, 0 ) )
 
 	PhysObj:EnableMotion( true )
 	PhysObj:EnableDrag( false ) 
@@ -263,6 +178,7 @@ function ENT:AddWheel( pos, radius, mass, type )
 		entity = wheel,
 		physobj = PhysObj,
 		mass = mass,
+		canRetract = canRetract
 	}
 
 	if not istable( self._lvsWheels ) then self._lvsWheels = {} end

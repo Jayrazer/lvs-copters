@@ -24,9 +24,9 @@ end
 function ENT:OnFrame()
 	local FT = RealFrameTime()
 
+	self:AnimLandingGear( FT )
 	self:AnimRotor( FT )
 	self:DamageFX( FT )
-	self:AnimLandingGear( FT )
 end
 
 function ENT:AnimRotor()

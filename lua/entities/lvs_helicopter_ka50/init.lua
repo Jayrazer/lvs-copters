@@ -1,8 +1,9 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
---AddCSLuaFile( "cl_attached_playermodels.lua" )
+include("sv_wheels.lua")
+include("sv_landinggear.lua")
 include("shared.lua")
-include("sv_landing_gear.lua")
+
 
 ENT.WheelAutoRetract = false
 
@@ -75,6 +76,69 @@ function ENT:SetRotor( PhysRot )
 	self:SetBodygroup( 4, PhysRot and 0 or 1 ) 
 end
 
+function ENT:PhysicsSimulate( phys, deltatime )
+	if self:GetEngineActive() then phys:Wake() end
+
+	local EntTable = self:GetTable()
+
+	local WorldGravity = self:GetWorldGravity()
+	local WorldUp = self:GetWorldUp()
+
+	local Up = self:GetUp()
+	local Left = -self:GetRight()
+
+	local Mul = self:GetThrottle()
+	local InputThrust = math.min( self:GetThrust() , 0 ) * EntTable.ThrustDown + math.max( self:GetThrust(), 0 ) * EntTable.ThrustUp
+
+	if self:HitGround() and InputThrust <= 0 then
+		Mul = 0
+	end
+
+	-- mouse aim needs to run at high speed.
+	if self:GetAI() then
+		self:CalcAIMove( phys, deltatime )
+	else
+		local ply = self:GetDriver()
+		if IsValid( ply ) and ply:lvsMouseAim() then
+			self:PlayerMouseAim( ply, phys, deltatime )
+		end
+	end
+
+	local Steer = self:GetSteer()
+
+	local Vel = phys:GetVelocity()
+	local VelL = phys:WorldToLocal( phys:GetPos() + Vel )
+
+	local YawPull = (math.deg( math.acos( math.Clamp( WorldUp:Dot( Left ) ,-1,1) ) ) - 90) /  90
+
+	local GravityYaw = math.abs( YawPull ) ^ 1.25 * self:Sign( YawPull ) * (WorldGravity / 100) * (math.min( Vector(VelL.x,VelL.y,0):Length() / EntTable.MaxVelocity,1) ^ 2)
+
+	local Pitch = math.Clamp(Steer.y,-1,1) * EntTable.TurnRatePitch
+	local Yaw = math.Clamp(Steer.z + GravityYaw * 0.25,-1,1) * EntTable.TurnRateYaw * 60
+	local Roll = math.Clamp(Steer.x,-1,1) * 1.5 * EntTable.TurnRateRoll
+
+	self:HandleLandingGear( deltatime )
+	self:SetWheelSteer( Steer.z * self.WheelSteerAngle )
+
+	local Ang = self:GetAngles()
+
+	local FadeMul = (1 - math.max( (45 - self:AngleBetweenNormal( WorldUp, Up )) / 45,0)) ^ 2
+	local ThrustMul = math.Clamp( 1 - (Vel:Length() / EntTable.MaxVelocity) * FadeMul, 0, 1 )
+
+	local Thrust = self:LocalToWorldAngles( Angle(Pitch,0,Roll) ):Up() * (WorldGravity + InputThrust * 500 * ThrustMul) * Mul
+
+	local Force, ForceAng = phys:CalculateForceOffset( Thrust, phys:LocalToWorld( phys:GetMassCenter() ) + self:GetUp() * 1000 )
+
+	local ForceLinear = (Force - Vel * 0.15 * EntTable.ForceLinearDampingMultiplier) * Mul
+	local ForceAngle = (ForceAng + (Vector(0,0,Yaw) - phys:GetAngleVelocity() * 1.5 * EntTable.ForceAngleDampingMultiplier) * deltatime * 250) * Mul
+
+	if EntTable._SteerOverride then
+		ForceAngle.z = (EntTable._SteerOverrideMove * math.max( self:GetThrust() * 2, 1 ) * 100 - phys:GetAngleVelocity().z) * Mul
+	end
+
+	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+end
+
 function ENT:GetMissileOffset()
 	return Vector(0,0,0)
 end
@@ -90,6 +154,14 @@ function ENT:OnTick()
 
 	if not self:IsEngineDestroyed() then
 		self:SetRotor( PhysRot )
+	end
+end
+
+function ENT:OnLandingGearToggled( bOn )
+	if bOn then
+		self:EmitSound( "lvs/vehicles/generic/gear.wav" )
+	else
+		self:EmitSound( "lvs/vehicles/generic/gear.wav" )
 	end
 end
 
