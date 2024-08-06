@@ -15,19 +15,19 @@ ENT.MDL = "models/heli/rus/ka50/ka50.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 500
+ENT.MaxHealth = 800
 
-ENT.MaxVelocity = 2000
+ENT.MaxVelocity = 2450
 
-ENT.ThrustUp = 1.2
-ENT.ThrustDown = 0.8
-ENT.ThrustRate = 0.8
+ENT.ThrustUp = 1.3
+ENT.ThrustDown = 0.9
+ENT.ThrustRate = 0.9
 
 ENT.ThrottleRateUp = 0.15
 ENT.ThrottleRateDown = 0.1
 
 ENT.TurnRatePitch = 1
-ENT.TurnRateYaw = 1.2
+ENT.TurnRateYaw = 1
 ENT.TurnRateRoll = 1
 
 ENT.ForceLinearDampingMultiplier = 1.4
@@ -98,7 +98,7 @@ function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
 	weapon.Ammo = 1100
-	weapon.Delay = 60 / 700
+	weapon.Delay = 60 / 600
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.StartAttack = function( ent )
@@ -135,12 +135,13 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 10
+		bullet.Force	= 15000
 		bullet.HullSize 	= 15
-		bullet.Damage	= 18
+		bullet.Damage	= 25
 		bullet.Velocity = 10000
-		bullet.SplashDamage = 20
-		bullet.SplashDamageRadius = 45
+		bullet.SplashDamage = 25
+		bullet.SplashDamageRadius = 80
+		bullet.SplashDamageType = DMG_BLAST
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -162,7 +163,7 @@ local weapon = {}
 	
 	-- Hydras
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Icon = Material("lvs/weapons/bomb.png")
 	weapon.Ammo = 50
 	weapon.Delay = 0.2
 	weapon.HeatRateUp = 0
@@ -198,7 +199,7 @@ local weapon = {}
 
 	-- hellfire
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/bomb.png")
+	weapon.Icon = Material("lvs/weapons/missile.png")
 	weapon.Ammo = 20
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
@@ -232,7 +233,7 @@ local weapon = {}
 		projectile:SetDamage( 600 )
 		projectile:SetRadius( 550 )
 		projectile:Enable()
-		projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
+		projectile:EmitSound("weapons/stinger_fire1.wav")
 
 		ent:TakeAmmo()
 	end
@@ -241,6 +242,47 @@ local weapon = {}
 		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
 	end
 	self:AddWeapon( weapon )
+	
+local weapon = {}
+	weapon.Icon = Material("lvs/weapons/bomb.png")
+	weapon.UseableByAI = false
+	weapon.Ammo = 2
+	weapon.Delay = 0.25
+	weapon.HeatRateUp = -0.4
+	weapon.HeatRateDown = 0.4
+	weapon.StartAttack = function( ent )
+		local Driver = ent:GetDriver()
+
+		local projectile = ents.Create( "lvs_bomb" )
+		projectile:SetPos( ent:LocalToWorld( Vector(-50,0,-25) ) )
+		projectile:SetAngles( ent:GetAngles() )
+		projectile:SetParent( ent )
+		projectile:Spawn()
+		projectile:Activate()
+		projectile:SetAttacker( IsValid( Driver ) and Driver or ent )
+		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		projectile:SetSpeed( ent:GetVelocity() )
+		projectile:SetDamage( 150 )
+		projectile:SetRadius( 250 )
+
+		self._ProjectileEntity = projectile
+	end
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent._ProjectileEntity ) then return end
+
+		ent._ProjectileEntity:Enable()
+		--ent._ProjectileEntity:EmitSound("npc/attack_helicopter/aheli_mine_drop1.wav")
+
+		ent:TakeAmmo()
+
+		ent:SetHeat( ent:GetHeat() + 0.2 )
+
+		if ent:GetHeat() >= 1 then
+			ent:SetOverheated( true )
+		end
+	end
+	self:AddWeapon( weapon )
+	
 end
 
 function ENT:StartCommand( ply, cmd )

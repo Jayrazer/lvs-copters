@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_helicopter"
 
-ENT.PrintName = "Bo 105 PAH-1A1 (Gunpods)"
+ENT.PrintName = "Bo 105 (Gunpods)"
 ENT.Category = "[LVS] - Helicopters"
 
 ENT.VehicleCategory = "Helicopters"
@@ -131,7 +131,7 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_orange"
-		bullet.Force	= 10
+		bullet.Force	= 6000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 10
 		bullet.Velocity = 8000

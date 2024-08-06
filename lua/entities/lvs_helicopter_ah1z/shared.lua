@@ -15,20 +15,20 @@ ENT.MDL = "models/lfs_merydian/helicopters/ah1z/viper.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 500
+ENT.MaxHealth = 700
 
-ENT.MaxVelocity = 2000
+ENT.MaxVelocity = 2100
 
 ENT.ThrustUp = 1.2
 ENT.ThrustDown = 0.8
-ENT.ThrustRate = 0.8
+ENT.ThrustRate = 1
 
 ENT.ThrottleRateUp = 0.15
 ENT.ThrottleRateDown = 0.1
 
-ENT.TurnRatePitch = 1
-ENT.TurnRateYaw = 1.2
-ENT.TurnRateRoll = 1
+ENT.TurnRatePitch = 1.2
+ENT.TurnRateYaw = 1.3
+ENT.TurnRateRoll = 1.2
 
 ENT.ForceLinearDampingMultiplier = 1.4
 
@@ -86,8 +86,6 @@ ENT.EngineSounds = {
 --ENT.FlyBySound = "AH6_FLYBY" -- which sound to play on fly by
 
 function ENT:OnSetupDataTables()
-	self:AddDT( "Bool", "LightsEnabled" )
-	self:AddDT( "Bool", "SignalsEnabled" )
 end
 
 function ENT:GetAimAngles()
@@ -160,12 +158,13 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 10
+		bullet.Force	= 15000
 		bullet.HullSize 	= 15
-		bullet.Damage	= 14
+		bullet.Damage	= 22
 		bullet.Velocity = 10000
-		bullet.SplashDamage = 16
-		bullet.SplashDamageRadius = 40
+		bullet.SplashDamage = 20
+		bullet.SplashDamageRadius = 70
+		bullet.SplashDamageType = DMG_BLAST
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -194,7 +193,7 @@ local weapon = {}
 	
 	-- Hydras
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Icon = Material("lvs/weapons/bomb.png")
 	weapon.Ammo = 40
 	weapon.Delay = 0.2
 	weapon.HeatRateUp = 0
@@ -230,7 +229,7 @@ local weapon = {}
 
 	-- hellfire
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/bomb.png")
+	weapon.Icon = Material("lvs/weapons/missile.png")
 	weapon.Ammo = 15
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
@@ -264,7 +263,7 @@ local weapon = {}
 		projectile:SetDamage( 600 )
 		projectile:SetRadius( 550 )
 		projectile:Enable()
-		projectile:EmitSound("npc/waste_scanner/grenade_fire.wav")
+		projectile:EmitSound("weapons/stinger_fire1.wav")
 
 		ent:TakeAmmo()
 	end
@@ -278,7 +277,7 @@ local weapon = {}
 	--sidewinder
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 6
+	weapon.Ammo = 8
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.25

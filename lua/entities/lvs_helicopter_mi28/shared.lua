@@ -15,7 +15,7 @@ ENT.MDL = "models/lfs_merydian/helicopters/mi28/havok.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 600
+ENT.MaxHealth = 800
 
 ENT.MaxVelocity = 2150
 
@@ -26,9 +26,9 @@ ENT.ThrustRate = 0.8
 ENT.ThrottleRateUp = 0.15
 ENT.ThrottleRateDown = 0.1
 
-ENT.TurnRatePitch = 1
+ENT.TurnRatePitch = 1.1
 ENT.TurnRateYaw = 1.1
-ENT.TurnRateRoll = 1
+ENT.TurnRateRoll = 1.1
 
 ENT.ForceLinearDampingMultiplier = 1.4
 
@@ -86,8 +86,6 @@ ENT.EngineSounds = {
 --ENT.FlyBySound = "AH6_FLYBY" -- which sound to play on fly by
 
 function ENT:OnSetupDataTables()
-	self:AddDT( "Bool", "LightsEnabled" )
-	self:AddDT( "Bool", "SignalsEnabled" )
 end
 
 function ENT:GetAimAngles()
@@ -162,12 +160,13 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 10
+		bullet.Force	= 15000
 		bullet.HullSize 	= 15
-		bullet.Damage	= 18
+		bullet.Damage	= 28
 		bullet.Velocity = 10000
-		bullet.SplashDamage = 20
-		bullet.SplashDamageRadius = 45
+		bullet.SplashDamage = 25
+		bullet.SplashDamageRadius = 80
+		bullet.SplashDamageType = DMG_BLAST
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -229,7 +228,7 @@ local weapon = {}
 	
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 15
+	weapon.Ammo = 10
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.25
