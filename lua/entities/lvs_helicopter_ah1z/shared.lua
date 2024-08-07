@@ -257,6 +257,21 @@ local weapon = {}
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
 	
+	weapon.FinishAttack = function( ent )
+		local Ammo = self:GetAmmo()
+		
+		if Ammo == 1 then
+			self:SetBodygroup(3, 0)
+			self:SetBodygroup(4, 1)
+		end
+		
+		if Ammo == 0 then
+			self:SetBodygroup(3, 1)
+			self:SetBodygroup(4, 1)
+		end
+		
+	end
+	
 	weapon.Attack = function( ent )
 
 		local pod = ent:GetDriverSeat()
@@ -305,6 +320,7 @@ local weapon = {}
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.25
+	
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -360,6 +376,10 @@ local weapon = {}
 		if NewHeat >= 1 then
 			ent:SetOverheated( true )
 		end
+		
+		local Ammo = self:GetAmmo()
+		self:SetBodygroup(5, Ammo+1 )
+		
 	end
 	weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
 	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
