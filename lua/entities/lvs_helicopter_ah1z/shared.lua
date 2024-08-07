@@ -121,23 +121,33 @@ local weapon = {}
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.2
 	weapon.StartAttack = function( ent )
-		ent.GunSound = ent:StartLoopingSound("M197_LOOP")
+		if not IsValid( self.SoundEmitter ) then
+			local ID = self:LookupAttachment( "muzzle" )
+			local Attachment = self:GetAttachment( ID )
+			self.SoundEmitter = self:AddSoundEmitter( self:WorldToLocal( Attachment.Pos ), "M197_LOOP", "M197_LOOP" )
+			self.SoundEmitter:SetSoundLevel( 95 )
+		end
+
+		self.SoundEmitter:Play()
 	end
-	weapon.FinishAttack = function( ent )
-		if !ent:WeaponsInRange() then return end
-		ent:StopLoopingSound( ent.GunSound )
+	
+	weapon.FinishAttack = function( ent)
+		if IsValid( self.SoundEmitter ) then
+			self.SoundEmitter:Stop()
+			self:EmitSound( "GUNPODS_STOP" )
+		end
 	end
 	
 	
 	weapon.Attack = function( ent )
 		if !ent:WeaponsInRange() then
 		
-			ent:StopLoopingSound( ent.GunSound )
+			self.SoundEmitter:Stop()
 		
 			return true
 		end
 		
-		ent.GunSound = ent:StartLoopingSound("M197_LOOP")
+		self.SoundEmitter:Play()
 		
 		local ID = ent:LookupAttachment( "muzzle" )
 		local Muzzle = ent:GetAttachment ( ID )
@@ -356,3 +366,12 @@ local weapon = {}
 	self:AddWeapon( weapon )
 
 end
+
+sound.Add( {
+	name = "M197_LOOP",
+	channel = CHAN_STATIC,
+	volume = 1.0,
+	level = 100,
+	pitch = {90,100},
+	sound = "^lvs_copters/weapons/m197_loop_750.wav"
+} )

@@ -121,13 +121,21 @@ local weapon = {}
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.17
 	weapon.StartAttack = function( ent )
-		ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
+		if not IsValid( self.SoundEmitter ) then
+			local ID = self:LookupAttachment( "muzzle" )
+			local Attachment = self:GetAttachment( ID )
+			self.SoundEmitter = self:AddSoundEmitter( self:WorldToLocal( Attachment.Pos ), "2A42_LOOP", "2A42_LOOP" )
+			self.SoundEmitter:SetSoundLevel( 95 )
+		end
+
+		self.SoundEmitter:Play()
 	end
 	
-	weapon.FinishAttack = function( ent )
-		if !ent:WeaponsInRange() then return end
-		ent:EmitSound("2A42_STOP")
-		ent:StopLoopingSound( ent.GunSound )
+	weapon.FinishAttack = function( ent)
+		if IsValid( self.SoundEmitter ) then
+			self.SoundEmitter:Stop()
+			self:EmitSound( "2A42_STOP" )
+		end
 	end
 	
 	
@@ -135,12 +143,12 @@ local weapon = {}
 	
 		if !ent:WeaponsInRange() then
 		
-			ent:StopLoopingSound( ent.GunSound )
+			self.SoundEmitter:Stop()
 		
 			return true
 		end
 		
-		ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
+		self.SoundEmitter:Play()
 	
 		local ID = ent:LookupAttachment( "muzzle" )
 		local Muzzle = ent:GetAttachment ( ID )
@@ -305,3 +313,25 @@ local weapon = {}
 	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
 	self:AddWeapon( weapon )
 end
+
+sound.Add( {
+	name = "2A42_LOOP",
+	channel = CHAN_auto,
+	volume = 1.0,
+	level = 100,
+	pitch = {90,100},
+	sound = "^lvs_copters/weapons/2a42_loop.wav"
+} )
+
+sound.Add( {
+	name = "2A42_STOP",
+	channel = CHAN_STATIC,
+	volume = 1.0,
+	level = 90,
+	pitch = {100},
+	sound = {
+	"^lvs_copters/weapons/2a42_lastshot1.wav",
+	"^lvs_copters/weapons/2a42_lastshot2.wav",
+	"^lvs_copters/weapons/2a42_lastshot3.wav"
+	}
+} )
