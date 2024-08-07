@@ -57,7 +57,7 @@ ENT.GibModels = {
 
 ENT.EngineSounds = {
 	{
-	    sound = "^lfs_custom/mi28n/mi28n_rotor.wav",
+	    sound = "lvs_copters/engine/rotor3.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,
@@ -69,7 +69,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-	    sound = "^lfs_custom/merydian_mechanics/heli_engine_generic.wav",
+	    sound = "lvs_copters/engine/rpm2.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,
@@ -121,12 +121,12 @@ local weapon = {}
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.17
 	weapon.StartAttack = function( ent )
-		ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
+		ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
 	end
 	
 	weapon.FinishAttack = function( ent )
 		if !ent:WeaponsInRange() then return end
-		ent:EmitSound("MI28_30MM_STOP")
+		ent:EmitSound("2A42_STOP")
 		ent:StopLoopingSound( ent.GunSound )
 	end
 	
@@ -140,7 +140,7 @@ local weapon = {}
 			return true
 		end
 		
-		ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
+		ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
 	
 		local ID = ent:LookupAttachment( "muzzle" )
 		local Muzzle = ent:GetAttachment ( ID )

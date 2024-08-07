@@ -1,39 +1,34 @@
 AddCSLuaFile()
 
 sound.Add( {
-	name = "30MM_LOOP",
+	name = "M197_LOOP",
 	channel = CHAN_STATIC,
 	volume = 1.0,
 	level = 100,
 	pitch = {90,100},
-	sound = "^lfs_custom/merydian_weapons/30mm_loop.wav"
+	sound = "^lvs_copters/weapons/m197_loop_750.wav"
 } )
 
 sound.Add( {
-	name = "30MM_STOP",
-	channel = CHAN_STATIC,
-	volume = 1.0,
-	level = 90,
-	pitch = {100},
-	sound = "^lfs_custom/merydian_weapons/30mm_loop_end.wav"
-} )
-
-sound.Add( {
-	name = "MI28_30MM_LOOP",
+	name = "2A42_LOOP",
 	channel = CHAN_STATIC,
 	volume = 1.0,
 	level = 100,
 	pitch = {90,100},
-	sound = "^lfs_custom/mi28n/mi28n_30mm.wav"
+	sound = "^lvs_copters/weapons/2a42_loop.wav"
 } )
 
 sound.Add( {
-	name = "MI28_30MM_STOP",
+	name = "2A42_STOP",
 	channel = CHAN_STATIC,
 	volume = 1.0,
 	level = 90,
 	pitch = {100},
-	sound = "^lfs_custom/mi28n/mi28n_30mm_end.wav"
+	sound = {
+	"^lvs_copters/weapons/2a42_lastshot1.wav",
+	"^lvs_copters/weapons/2a42_lastshot2.wav",
+	"^lvs_copters/weapons/2a42_lastshot3.wav"
+	}
 } )
 
 sound.Add( {
@@ -42,7 +37,7 @@ sound.Add( {
 	volume = 1.0,
 	level = 100,
 	pitch = {90,100},
-	sound = "^lfs_custom/shark_weapons/gunpod_loop.wav"
+	sound = "^lvs_copters/weapons/m3_loop.wav"
 } )
 
 sound.Add( {
@@ -51,5 +46,5 @@ sound.Add( {
 	volume = 1.0,
 	level = 90,
 	pitch = {100},
-	sound = "^lfs_custom/shark_weapons/gunpod_end.wav"
+	sound = "^lvs_copters/weapons/m3_lastshot.wav"
 } )

@@ -54,7 +54,7 @@ ENT.GibModels = {
 
 ENT.EngineSounds = {
 	{
-	    sound = "^lfs_custom/merydian_mechanics/rotors_merged.wav",
+	    sound = "lvs_copters/engine/rotor2.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,
@@ -66,7 +66,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-	    sound = "^lfs_custom/merydian_mechanics/heli_engine_generic.wav",
+	    sound = "lvs_copters/engine/rpm3.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,

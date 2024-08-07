@@ -57,7 +57,7 @@ ENT.GibModels = {
 
 ENT.EngineSounds = {
 	{
-	    sound = "^lfs_custom/merydian_mechanics/rotors_merged.wav",
+	    sound = "^lvs_copters/engine/double_rotor.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,
@@ -69,7 +69,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-	    sound = "^lfs_custom/merydian_mechanics/heli_engine_generic.wav",
+	    sound = "^lvs_copters/engine/rpm1.wav",
 		Pitch = 0,
 		PitchMin = 0,
 		PitchMax = 155,
@@ -102,10 +102,10 @@ local weapon = {}
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.StartAttack = function( ent )
-    ent.GunSound = ent:StartLoopingSound("MI28_30MM_LOOP")
+    ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
 	end
 	weapon.FinishAttack = function( ent )
-    ent:EmitSound("MI28_30MM_STOP")
+    ent:EmitSound("2A42_STOP")
     ent:StopLoopingSound( ent.GunSound )
 	end
 	
@@ -212,49 +212,52 @@ local weapon = {}
 
 	-- hellfire
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/bomb.png")
+		weapon.Icon = Material("lvs/weapons/hellfire.png")
 	weapon.Ammo = 20
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	
 	weapon.Attack = function( ent )
 
+		local pod = ent:GetDriverSeat()
+		if not IsValid( pod ) then return end
+		
 		ent.FireLeft = not ent.FireLeft
+			
+		local bullet = {}
+		bullet.Src 	= ( ent:LocalToWorld( Vector(81.03,110.66 * (self.FireLeft and 1 or -1),41.45) ) )
+		bullet.Dir 	= ent:GetForward()
+		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
+		bullet.TracerName = "lvs_tracer_missile"
+		bullet.Force	= 10000
+		bullet.HullSize 	= 15
+		bullet.Damage	= 600
+		bullet.Velocity = 3000
+		bullet.SplashDamage = 400
+		bullet.SplashDamageRadius = 500
+		bullet.SplashDamageType = DMG_BLAST
+		bullet.Attacker 	= ent:GetDriver()
+		
+		ent:EmitSound( "weapons/stinger_fire1.wav" )
+		
+		bullet.Callback = function(att, tr, dmginfo)
+		local effectdata = EffectData()
+		effectdata:SetOrigin( tr.HitPos )
+		effectdata:SetNormal( tr.HitNormal )
+		util.Effect( "lvs_explosion_bomb", effectdata, true, true )
+	end
 
-		local Driver = ent:GetDriver()
-		local Target = ent:GetEyeTrace().HitPos
+		ent:LVSFireBullet( bullet )
 
-		local projectile = ents.Create( "lvs_missile" )
-		projectile:SetPos( ent:LocalToWorld( Vector(19.36,105.89 * (self.FireLeft and 1 or -1),45.39) ) )
-		projectile:SetAngles( ent:GetAngles() )
-		projectile:SetParent( ent )
-		projectile:Spawn()
-		projectile:Activate()
-		projectile.GetTarget = function( missile ) return missile end
-		projectile.GetTargetPos = function( missile )
-			if missile.HasReachedTarget then
-				return missile:LocalToWorld( Vector(100,0,0) )
-			end
-
-			if (missile:GetPos() - Target):Length() < 100 then
-				missile.HasReachedTarget = true
-			end
-			return Target
+		ent:TakeAmmo( 1 )
+		
+		
+		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
 		end
-		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
-		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( ent:GetVelocity():Length() + 2000 )
-		projectile:SetDamage( 600 )
-		projectile:SetRadius( 550 )
-		projectile:Enable()
-		projectile:EmitSound("weapons/stinger_fire1.wav")
-
-		ent:TakeAmmo()
-	end
-	
-	weapon.OnSelect = function( ent )
-		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
-	end
-	self:AddWeapon( weapon )
+		self:AddWeapon( weapon )
+		
 	
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bomb.png")
