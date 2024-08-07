@@ -35,7 +35,7 @@ function ENT:OnSpawn( PObj )
     end
 	
 	self:AddDS( {
-    pos = Vector(0,0,0),
+    pos = Vector(-30,0,-110),
     ang = Angle(0,0,0),
     mins = Vector(-60,-40,-10),
     maxs =  Vector(140,40,80),
@@ -103,11 +103,11 @@ function ENT:OnCollision( data, physobj )
 	return false
 end
 
-hook.Add("LoadFlareConfiguration", "lvs_mi28", function ()
-    UF:RegisterFlareVehicleConfiguration("lvs_helicopter_mi28",
+hook.Add("LoadFlareConfiguration", "lvs_ah64", function ()
+    UF:RegisterFlareVehicleConfiguration("lvs_helicopter_ah64",
             {
                 {
-                    pos = Vector(-90.54, 0, -50.59), -- Position where to eject flares.
+                    pos = Vector(-116, 0, -112), -- Position where to eject flares.
                     dir = UF.CONST.BACKWARDS, -- In which direction to eject flares, defaults available: UF.CONST.BACKWARDS, UF.CONST.RIGHT, UF.CONST.LEFT.
                     dirMulti = 1000, -- Optional velocity multiplier for ejecting flares.
                 },
