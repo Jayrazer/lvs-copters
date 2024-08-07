@@ -170,7 +170,7 @@ local weapon = {}
 		bullet.Force	= 15000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 22
-		bullet.Velocity = 10000
+		bullet.Velocity = 15000
 		bullet.SplashDamage = 20
 		bullet.SplashDamageRadius = 100
 		bullet.SplashDamageType = DMG_BLAST
@@ -179,7 +179,7 @@ local weapon = {}
 		local effectdata = EffectData()
 		effectdata:SetOrigin( tr.HitPos )
 		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_custom_30mm_impact", effectdata, true, true )
+		util.Effect( "lvs_bullet_impact", effectdata, true, true )
 	end
 
 		ent:LVSFireBullet( bullet )
