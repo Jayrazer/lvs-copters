@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$basetexture"					"models\drgordon\ghosts\apache\apache_blades_blurred"
+
+	"$halflambert" "1"				
+	"$nocull" "0"
+	"$translucent"			"1"
+
+
+}

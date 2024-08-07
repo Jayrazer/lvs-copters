@@ -10,7 +10,7 @@ ENT.VehicleSubCategory = "Heli Wars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/lfs_merydian/wt_helicopters/bo105_1a1.mdl"
+ENT.MDL = "models/lvs_copters/wt/bo105_1a1.mdl"
 --ENT.MDL_DESTROYED = 	"models/lfs_merydian/helicopters/ah1z/gibs/viper_1.mdl"
 
 ENT.AITEAM = 1

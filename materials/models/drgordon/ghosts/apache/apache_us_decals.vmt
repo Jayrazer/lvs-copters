@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture"					"models\drgordon\ghosts\apache\apache_us_decals"
+
+	"$translucent"			"1"
+
+
+}
