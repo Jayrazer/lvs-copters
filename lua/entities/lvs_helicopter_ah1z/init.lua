@@ -9,6 +9,9 @@ function ENT:OnSpawn( PObj )
 	DriverSeat:SetCameraHeight( 0 )
 	DriverSeat.HidePlayer = true
 	
+	self:SetBodygroup( 3, 8 ) 
+	self:SetBodygroup( 4, 2 ) 
+	
 	--local PassengerSeats = {
 		--{
 			--pos = Vector(133.898,0,1.513),

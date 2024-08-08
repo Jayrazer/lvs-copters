@@ -257,21 +257,6 @@ local weapon = {}
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
 	
-	weapon.FinishAttack = function( ent )
-		local Ammo = self:GetAmmo()
-		
-		if Ammo == 1 then
-			self:SetBodygroup(3, 0)
-			self:SetBodygroup(4, 1)
-		end
-		
-		if Ammo == 0 then
-			self:SetBodygroup(3, 1)
-			self:SetBodygroup(4, 1)
-		end
-		
-	end
-	
 	weapon.Attack = function( ent )
 
 		local pod = ent:GetDriverSeat()
@@ -306,6 +291,8 @@ local weapon = {}
 
 		ent:TakeAmmo( 1 )
 		
+		local Ammo = self:GetAmmo()
+		self:SetBodygroup(3, Ammo )
 		
 		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
 	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
@@ -316,7 +303,7 @@ local weapon = {}
 	--sidewinder
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 8
+	weapon.Ammo = 6
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.25
@@ -378,7 +365,7 @@ local weapon = {}
 		end
 		
 		local Ammo = self:GetAmmo()
-		self:SetBodygroup(5, Ammo+1 )
+		self:SetBodygroup(4, Ammo )
 		
 	end
 	weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
