@@ -97,16 +97,26 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
-	weapon.Ammo = 1100
+	weapon.Ammo = 1000
 	weapon.Delay = 60 / 600
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.StartAttack = function( ent )
-    ent.GunSound = ent:StartLoopingSound("2A42_LOOP")
+		if not IsValid( self.SoundEmitter ) then
+			local ID = self:LookupAttachment( "muzzle" )
+			local Attachment = self:GetAttachment( ID )
+			self.SoundEmitter = self:AddSoundEmitter( self:WorldToLocal( Attachment.Pos ), "2A42_LOOP", "2A42_LOOP" )
+			self.SoundEmitter:SetSoundLevel( 95 )
+		end
+
+		self.SoundEmitter:Play()
 	end
-	weapon.FinishAttack = function( ent )
-    ent:EmitSound("2A42_STOP")
-    ent:StopLoopingSound( ent.GunSound )
+	
+	weapon.FinishAttack = function( ent)
+		if IsValid( self.SoundEmitter ) then
+			self.SoundEmitter:Stop()
+			self:EmitSound( "2A42_STOP" )
+		end
 	end
 	
 	
@@ -213,7 +223,7 @@ local weapon = {}
 	-- hellfire
 	local weapon = {}
 		weapon.Icon = Material("lvs/weapons/hellfire.png")
-	weapon.Ammo = 20
+	weapon.Ammo = 24
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
@@ -322,3 +332,25 @@ function ENT:StartCommand( ply, cmd )
 		self:PlayerDirectInput( ply, cmd )
 	end
 end
+
+sound.Add( {
+	name = "2A42_LOOP",
+	channel = CHAN_auto,
+	volume = 1.0,
+	level = 100,
+	pitch = {90,100},
+	sound = "^lvs_copters/weapons/2a42_loop.wav"
+} )
+
+sound.Add( {
+	name = "2A42_STOP",
+	channel = CHAN_STATIC,
+	volume = 1.0,
+	level = 90,
+	pitch = {100},
+	sound = {
+	"^lvs_copters/weapons/2a42_lastshot1.wav",
+	"^lvs_copters/weapons/2a42_lastshot2.wav",
+	"^lvs_copters/weapons/2a42_lastshot3.wav"
+	}
+} )

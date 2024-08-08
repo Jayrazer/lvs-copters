@@ -252,7 +252,7 @@ local weapon = {}
 	-- hellfire
 	local weapon = {}
 		weapon.Icon = Material("lvs/weapons/hellfire.png")
-	weapon.Ammo = 10
+	weapon.Ammo = 16
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0

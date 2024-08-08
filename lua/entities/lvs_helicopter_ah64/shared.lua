@@ -251,7 +251,7 @@ function ENT:InitWeapons()
 	
 	local weapon = {}
 		weapon.Icon = Material("lvs/weapons/hellfire.png")
-	weapon.Ammo = 15
+	weapon.Ammo = 20
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
