@@ -35,6 +35,6 @@ function ENT:AnimRotor()
 	Rot1:Normalize() 
 	
 
-	self:ManipulateBoneAngles( 1, Rot1 )
-	self:ManipulateBoneAngles( 2, Rot1 )
+	self:ManipulateBoneAngles( 3, Rot1 )
+	self:ManipulateBoneAngles( 4, Rot1 )
 end
