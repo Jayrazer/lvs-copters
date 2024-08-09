@@ -36,23 +36,17 @@ ENT.ForceAngleMultiplier = 1
 ENT.ForceAngleDampingMultiplier = 1
 
 ENT.GibModels = {
-	"models/XQM/wingpiece2.mdl",
-	"models/XQM/wingpiece2.mdl",
+	"models/lvs_copters/bf4/gibs/havok_body.mdl",
+	"models/lvs_copters/bf4/gibs/havok_tail.mdl",
+	"models/combine_apc_destroyed_gib04.mdl",
 	"models/combine_apc_destroyed_gib04.mdl",
 	"models/combine_apc_destroyed_gib03.mdl",
-	"models/props_phx/misc/propeller2x_small.mdl",
-	"models/props_phx/misc/propeller3x_small.mdl",
-	"models/gibs/gunship_gibs_nosegun.mdl",
-	"models/gibs/gunship_gibs_nosegun.mdl",
-	"models/props_c17/TrapPropeller_Engine.mdl",
-	"models/XQM/jettailpiece1medium.mdl",
-	"models/XQM/pistontype1huge.mdl",
-	"models/props_lab/reciever01b.mdl",
-	"models/props_lab/reciever01c.mdl",
-	"models/nova/jeep_seat.mdl",
+	"models/combine_apc_destroyed_gib03.mdl",
+	"models/combine_apc_destroyed_gib03.mdl",
+	"models/container_chunk05.mdl",
 	"models/container_chunk05.mdl",
 	"models/combine_apc_destroyed_gib05.mdl",
-	"models/xqm/jetbody2wingrootb.mdl",
+	"models/combine_apc_destroyed_gib05.mdl",
 }
 
 ENT.EngineSounds = {
