@@ -139,13 +139,12 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 15000
+		bullet.Force	= 6500
 		bullet.HullSize 	= 15
 		bullet.Damage	= 25
 		bullet.Velocity = 10000
 		bullet.SplashDamage = 25
-		bullet.SplashDamageRadius = 110
-		bullet.SplashDamageType = DMG_BLAST
+		bullet.SplashDamageRadius = 1200
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -185,13 +184,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 10000
+		bullet.Force	= 3500
 		bullet.HullSize 	= 15
 		bullet.Damage	= 400
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 300
-		bullet.SplashDamageType = DMG_BLAST
+		bullet.SplashDamageRadius = 1300
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -234,13 +232,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 10000
+		bullet.Force	= 9500
 		bullet.HullSize 	= 15
 		bullet.Damage	= 600
 		bullet.Velocity = 3000
 		bullet.SplashDamage = 400
-		bullet.SplashDamageRadius = 500
-		bullet.SplashDamageType = DMG_BLAST
+		bullet.SplashDamageRadius = 2500
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "weapons/stinger_fire1.wav" )
