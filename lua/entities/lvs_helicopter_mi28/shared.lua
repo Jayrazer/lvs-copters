@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/bf4/mi28/havok.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 800
+ENT.MaxHealth = 1500
 
 ENT.MaxVelocity = 2150
 
@@ -238,14 +238,16 @@ local weapon = {}
 	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
 		end
 		self:AddWeapon( weapon )
+		
+		
 	
 	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 12
+	weapon.Ammo = 16
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.3
+	weapon.HeatRateDown = 0.6
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -279,7 +281,7 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 1200 )
+		projectile:SetDamage( 1500 )
 		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile

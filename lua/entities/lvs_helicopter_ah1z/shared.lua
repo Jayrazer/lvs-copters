@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/bf4/ah1z/viper.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 700
+ENT.MaxHealth = 1000
 
 ENT.MaxVelocity = 2100
 

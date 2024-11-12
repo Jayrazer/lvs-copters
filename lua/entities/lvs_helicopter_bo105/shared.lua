@@ -4,6 +4,9 @@ ENT.Base = "lvs_base_helicopter"
 ENT.PrintName = "Bo 105 (Unarmed)"
 ENT.Category = "[LVS] - Helicopters"
 
+ENT.VehicleCategory = "Helicopters"
+ENT.VehicleSubCategory = "Heli Wars"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
@@ -12,7 +15,7 @@ ENT.MDL = "models/lvs_copters/wt/bo105_1a1.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 250
+ENT.MaxHealth = 300
 
 ENT.MaxVelocity = 2800
 

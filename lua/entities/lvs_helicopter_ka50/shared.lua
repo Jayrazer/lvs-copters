@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_helicopter"
 
-ENT.PrintName = "Ka 50 \"Black Shark\""
+ENT.PrintName = "Ka 50 (Missiles)"
 ENT.Category = "[LVS] - Helicopters"
 
 ENT.VehicleCategory = "Helicopters"
@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/dark/ka50/ka50.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 800
+ENT.MaxHealth = 1500
 
 ENT.MaxVelocity = 2450
 
@@ -263,10 +263,10 @@ local weapon = {}
 	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 20
+	weapon.Ammo = 12
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.6
+	weapon.HeatRateDown = 0.35
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -300,8 +300,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 950 )
-		projectile:SetRadius( 300 )
+		projectile:SetDamage( 2500 )
+		projectile:SetRadius( 400 )
 
 		ent._Missile = projectile
 
@@ -350,7 +350,7 @@ local weapon = {}
 		projectile:SetAttacker( IsValid( Driver ) and Driver or ent )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
 		projectile:SetSpeed( ent:GetVelocity() )
-		projectile:SetDamage( 2500 ) -- tank killer
+		projectile:SetDamage( 5000 ) -- tank killer
 		projectile:SetRadius( 500 )
 
 		self._ProjectileEntity = projectile

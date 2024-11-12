@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/dark/ah64/ah-64d_apache_longbow.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 800
+ENT.MaxHealth = 1400
 
 ENT.MaxVelocity = 2050
 

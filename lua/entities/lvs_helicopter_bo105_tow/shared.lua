@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/wt/bo105_1a1.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 300
+ENT.MaxHealth = 600
 
 ENT.MaxVelocity = 2700
 
@@ -124,8 +124,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 800 )
-		projectile:SetRadius( 300 )
+		projectile:SetDamage( 2000 )
+		projectile:SetRadius( 400 )
 
 		ent._Missile = projectile
 

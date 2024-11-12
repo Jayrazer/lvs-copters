@@ -15,7 +15,7 @@ ENT.MDL = "models/lvs_copters/wt/bo105_1a1.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 300
+ENT.MaxHealth = 600
 
 ENT.MaxVelocity = 2700
 
