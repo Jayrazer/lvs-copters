@@ -10,7 +10,7 @@ function ENT:OnSpawn( PObj )
 	DriverSeat.HidePlayer = true
 	
 	self:SetBodygroup( 3, 8 ) 
-	self:SetBodygroup( 4, 2 ) 
+	self:SetBodygroup( 4, 0 ) 
 	
 	--local PassengerSeats = {
 		--{

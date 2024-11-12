@@ -110,7 +110,7 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
-	weapon.Ammo = 1200
+	weapon.Ammo = 750
 	weapon.Delay = 60 / 800
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.2
@@ -161,12 +161,13 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 6500
+		bullet.Force	= 3500
 		bullet.HullSize 	= 15
 		bullet.Damage	= 65
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 12000
 		bullet.SplashDamage = 40
-		bullet.SplashDamageRadius = 200
+		bullet.SplashDamageRadius = 50
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -210,15 +211,17 @@ local weapon = {}
 			
 		local bullet = {}
 		bullet.Src 	= ( ent:LocalToWorld( Vector(22.73,62.76 * (self.FireLeft and 1 or -1),-12.74) ) )
-		bullet.Dir 	= ent:GetForward()
+		bullet.Dir 	=  ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
 		bullet.Force	= 18000
-		bullet.HullSize 	= 15
+		bullet.HullSize 	= 30
 		bullet.Damage	= 400
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
 		bullet.SplashDamageRadius = 300
+		bullet.SplashDamageType = DMG_AIRBOAT
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -242,63 +245,70 @@ local weapon = {}
 	
 
 	-- hellfire
-	local weapon = {}
-		weapon.Icon = Material("lvs/weapons/hellfire.png")
-	weapon.Ammo = 16
-	weapon.Delay = 0.5
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 0
+	-- local weapon = {}
+		-- weapon.Icon = Material("lvs/weapons/hellfire.png")
+	-- weapon.Ammo = 16
+	-- weapon.Delay = 0.5
+	-- weapon.HeatRateUp = 0
+	-- weapon.HeatRateDown = 0
 	
-	weapon.Attack = function( ent )
+	-- weapon.Attack = function( ent )
 
-		local pod = ent:GetDriverSeat()
-		if not IsValid( pod ) then return end
+		-- local pod = ent:GetDriverSeat()
+		-- if not IsValid( pod ) then return end
+		-- local startpos = pod:LocalToWorld( pod:OBBCenter() )
+		-- local trace = util.TraceHull( {
+			-- start = startpos,
+			-- endpos = (startpos + ent:GetForward() * 50000),
+			-- mins = Vector( -10, -10, -10 ),
+			-- maxs = Vector( 10, 10, 10 ),
+			-- filter = ent:GetCrosshairFilterEnts()
+		-- } )
 		
-		ent.FireLeft = not ent.FireLeft
+		-- ent.FireLeft = not ent.FireLeft
 			
-		local bullet = {}
-		bullet.Src 	= ( ent:LocalToWorld( Vector(18.12,99.57 * (self.FireLeft and 1 or -1),-21.45) ) )
-		bullet.Dir 	= ent:GetForward()
-		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
-		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 28000
-		bullet.HullSize 	= 15
-		bullet.Damage	= 600
-		bullet.Velocity = 3000
-		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 250
-		bullet.Attacker 	= ent:GetDriver()
+		-- local bullet = {}
+		-- bullet.Src 	= ( ent:LocalToWorld( Vector(18.12,99.57 * (self.FireLeft and 1 or -1),-21.45) ) )
+		-- bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized()
+		-- bullet.Spread 	= Vector( 0,  0.01, 0.01 )
+		-- bullet.TracerName = "lvs_tracer_missile"
+		-- bullet.Force	= 28000
+		-- bullet.HullSize 	= 30
+		-- bullet.Damage	= 600
+		-- bullet.Velocity = 3000
+		-- bullet.SplashDamage = 400
+		-- bullet.SplashDamageRadius = 250
+		-- bullet.Attacker 	= ent:GetDriver()
 		
-		ent:EmitSound( "weapons/stinger_fire1.wav" )
+		-- ent:EmitSound( "weapons/stinger_fire1.wav" )
 		
-		bullet.Callback = function(att, tr, dmginfo)
-		local effectdata = EffectData()
-		effectdata:SetOrigin( tr.HitPos )
-		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_explosion_bomb", effectdata, true, true )
-	end
+		-- bullet.Callback = function(att, tr, dmginfo)
+		-- local effectdata = EffectData()
+		-- effectdata:SetOrigin( tr.HitPos )
+		-- effectdata:SetNormal( tr.HitNormal )
+		-- util.Effect( "lvs_explosion_bomb", effectdata, true, true )
+	-- end
 
-		ent:LVSFireBullet( bullet )
+		-- ent:LVSFireBullet( bullet )
 
-		ent:TakeAmmo( 1 )
+		-- ent:TakeAmmo( 1 )
 		
-		local Ammo = self:GetAmmo()
-		self:SetBodygroup(3, Ammo )
+		-- local Ammo = self:GetAmmo()
+		-- self:SetBodygroup(3, Ammo )
 		
-		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
-	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
-		end
-		self:AddWeapon( weapon )
-
-
-	--sidewinder
+		-- weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	    -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
+		-- end
+		-- self:AddWeapon( weapon )
+		
+		
+	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 6
+	weapon.Icon = Material("lvs/weapons/hellfire.png")
+	weapon.Ammo = 8
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
-	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.25
-	
+	weapon.HeatRateUp = -0.6 -- cool down when attack key is held. This system fires on key-release.
+	weapon.HeatRateDown = 0.6
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -316,11 +326,11 @@ local weapon = {}
 
 		if (ent._nextMissle or 0) > T then return end
 
-		ent._nextMissle = T + 0.5
+		ent._nextMissle = T + 0.75
 
 		ent._swapMissile = not ent._swapMissile
 
-		local Pos = Vector( -4, (ent._swapMissile and -104 or 104), 13 )
+		local Pos = Vector( 36.6, (ent._swapMissile and 99.77 or -99.77), -20.34 )
 
 		local Driver = self:GetDriver()
 
@@ -332,8 +342,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 300 ) -- these are more for air-to-air
-		projectile:SetRadius( 200 )
+		projectile:SetDamage( 800 )
+		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile
 
@@ -350,7 +360,7 @@ local weapon = {}
 
 		ent._Missile = nil
 
-		local NewHeat = ent:GetHeat() + 0.5
+		local NewHeat = ent:GetHeat() + 0.3
 
 		ent:SetHeat( NewHeat )
 		if NewHeat >= 1 then
@@ -358,12 +368,87 @@ local weapon = {}
 		end
 		
 		local Ammo = self:GetAmmo()
-		self:SetBodygroup(4, Ammo )
+		self:SetBodygroup(3, Ammo )
 		
 	end
 	weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
 	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
 	self:AddWeapon( weapon )
+
+
+	--sidewinder
+	-- local weapon = {}
+	-- weapon.Icon = Material("lvs/weapons/missile.png")
+	-- weapon.Ammo = 6
+	-- weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
+	-- weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
+	-- weapon.HeatRateDown = 0.25
+	
+	-- weapon.Attack = function( ent )
+		-- local T = CurTime()
+
+		-- if IsValid( ent._Missile ) then
+			-- if (ent._nextMissleTracking or 0) > T then return end
+
+			-- ent._nextMissleTracking = T + 0.1 -- 0.1 second interval because those find functions can be expensive
+
+			-- ent._Missile:FindTarget( ent:GetPos(), ent:GetForward(), 30, 7500 )
+
+			-- return
+		-- end
+
+		-- local T = CurTime()
+
+		-- if (ent._nextMissle or 0) > T then return end
+
+		-- ent._nextMissle = T + 0.5
+
+		-- ent._swapMissile = not ent._swapMissile
+
+		-- local Pos = Vector( -4, (ent._swapMissile and -104 or 104), 13 )
+
+		-- local Driver = self:GetDriver()
+
+		-- local projectile = ents.Create( "lvs_missile" )
+		-- projectile:SetPos( ent:LocalToWorld( Pos ) )
+		-- projectile:SetAngles( ent:LocalToWorldAngles( Angle(0,ent._swapMissile and 2 or -2,0) ) )
+		-- projectile:SetParent( ent )
+		-- projectile:Spawn()
+		-- projectile:Activate()
+		-- projectile:SetAttacker( IsValid( Driver ) and Driver or self )
+		-- projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		-- projectile:SetDamage( 800 ) -- these are more for air-to-air
+		-- projectile:SetRadius( 200 )
+
+		-- ent._Missile = projectile
+
+		-- ent:SetNextAttack( CurTime() + 0.1 ) -- wait 0.1 second before starting to track
+	-- end
+	-- weapon.FinishAttack = function( ent )
+		-- if not IsValid( ent._Missile ) then return end
+
+		-- local projectile = ent._Missile
+
+		-- projectile:Enable()
+		-- projectile:EmitSound( "weapons/stinger_fire1.wav", 125 )
+		-- ent:TakeAmmo()
+
+		-- ent._Missile = nil
+
+		-- local NewHeat = ent:GetHeat() + 0.5
+
+		-- ent:SetHeat( NewHeat )
+		-- if NewHeat >= 1 then
+			-- ent:SetOverheated( true )
+		-- end
+		
+		-- local Ammo = self:GetAmmo()
+		-- self:SetBodygroup(4, Ammo )
+		
+	-- end
+	-- weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	-- weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
+	-- self:AddWeapon( weapon )
 
 end
 

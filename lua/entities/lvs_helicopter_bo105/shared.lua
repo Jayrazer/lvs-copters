@@ -4,9 +4,6 @@ ENT.Base = "lvs_base_helicopter"
 ENT.PrintName = "Bo 105 (Unarmed)"
 ENT.Category = "[LVS] - Helicopters"
 
-ENT.VehicleCategory = "Helicopters"
-ENT.VehicleSubCategory = "Heli Wars"
-
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 

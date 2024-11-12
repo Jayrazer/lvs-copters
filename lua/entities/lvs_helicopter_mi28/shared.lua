@@ -110,7 +110,7 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
-	weapon.Ammo = 1000
+	weapon.Ammo = 460
 	weapon.Delay = 60 / 700
 	weapon.HeatRateUp = 0.15
 	weapon.HeatRateDown = 0.17
@@ -162,18 +162,19 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 8500
+		bullet.Force	= 15000
 		bullet.HullSize 	= 15
-		bullet.Damage	= 75
+		bullet.Damage	= 125
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 12000
-		bullet.SplashDamage = 50
-		bullet.SplashDamageRadius = 350
+		bullet.SplashDamage = 30
+		bullet.SplashDamageRadius = 50
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
 		effectdata:SetOrigin( tr.HitPos )
 		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_custom_30mm_impact", effectdata, true, true )
+		util.Effect( "lvs_bullet_impact", effectdata, true, true )
 	end
 
 		ent:LVSFireBullet( bullet )
@@ -213,11 +214,13 @@ local weapon = {}
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
 		bullet.Force	= 18000
-		bullet.HullSize 	= 15
+		bullet.HullSize 	= 30
 		bullet.Damage	= 400
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
 		bullet.SplashDamageRadius = 300
+		bullet.SplashDamageType = DMG_AIRBOAT
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -236,7 +239,7 @@ local weapon = {}
 		
 		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
 	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
-		end
+	end
 		self:AddWeapon( weapon )
 		
 		
@@ -244,10 +247,10 @@ local weapon = {}
 	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 16
+	weapon.Ammo = 12
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
-	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.6
+	weapon.HeatRateUp = -0.4 -- cool down when attack key is held. This system fires on key-release.
+	weapon.HeatRateDown = 0.4
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -265,7 +268,7 @@ local weapon = {}
 
 		if (ent._nextMissle or 0) > T then return end
 
-		ent._nextMissle = T + 0.5
+		ent._nextMissle = T + 0.75
 
 		ent._swapMissile = not ent._swapMissile
 
@@ -281,7 +284,7 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 1500 )
+		projectile:SetDamage( 800 )
 		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile

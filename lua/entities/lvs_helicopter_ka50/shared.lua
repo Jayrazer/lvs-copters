@@ -91,7 +91,7 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
-	weapon.Ammo = 1000
+	weapon.Ammo = 460
 	weapon.Delay = 60 / 600
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
@@ -139,18 +139,19 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 8500
+		bullet.Force	= 15000
 		bullet.HullSize 	= 15
-		bullet.Damage	= 75
+		bullet.Damage	= 125
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 12000
-		bullet.SplashDamage = 50
-		bullet.SplashDamageRadius = 350
+		bullet.SplashDamage = 30
+		bullet.SplashDamageRadius = 50
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
 		effectdata:SetOrigin( tr.HitPos )
 		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_custom_30mm_impact", effectdata, true, true )
+		util.Effect( "lvs_bullet_impact", effectdata, true, true )
 	end
 
 		ent:LVSFireBullet( bullet )
@@ -185,11 +186,13 @@ local weapon = {}
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
 		bullet.Force	= 18000
-		bullet.HullSize 	= 15
+		bullet.HullSize 	= 30
 		bullet.Damage	= 400
+		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
 		bullet.SplashDamageRadius = 300
+		bullet.SplashDamageType = DMG_AIRBOAT
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -265,7 +268,7 @@ local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
 	weapon.Ammo = 12
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
-	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
+	weapon.HeatRateUp = -0.35 -- cool down when attack key is held. This system fires on key-release.
 	weapon.HeatRateDown = 0.35
 	weapon.Attack = function( ent )
 		local T = CurTime()
@@ -284,7 +287,7 @@ local weapon = {}
 
 		if (ent._nextMissle or 0) > T then return end
 
-		ent._nextMissle = T + 0.5
+		ent._nextMissle = T + 0.75
 
 		ent._swapMissile = not ent._swapMissile
 

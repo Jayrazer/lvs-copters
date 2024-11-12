@@ -87,7 +87,7 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/dual_mg.png")
-	weapon.Ammo = 1000
+	weapon.Ammo = 1200
 	weapon.Delay = 60 / 1200
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25

@@ -87,10 +87,10 @@ end
 function ENT:InitWeapons()
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 12
+	weapon.Ammo = 6
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.25
+	weapon.HeatRateDown = 0.5
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -124,7 +124,7 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 2000 )
+		projectile:SetDamage( 700 )
 		projectile:SetRadius( 400 )
 
 		ent._Missile = projectile
