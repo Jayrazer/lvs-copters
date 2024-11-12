@@ -254,7 +254,7 @@ local weapon = {}
 		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 300
+		bullet.SplashDamageRadius = 350
 		bullet.SplashDamageType = DMG_AIRBOAT
 		bullet.Attacker 	= ent:GetDriver()
 		

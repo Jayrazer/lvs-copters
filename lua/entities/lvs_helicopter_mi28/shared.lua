@@ -219,7 +219,7 @@ local weapon = {}
 		bullet.DamageType	= DMG_AIRBOAT
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 300
+		bullet.SplashDamageRadius = 350
 		bullet.SplashDamageType = DMG_AIRBOAT
 		bullet.Attacker 	= ent:GetDriver()
 		
@@ -284,7 +284,7 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetDamage( 800 )
+		projectile:SetDamage( 1000 )
 		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile
