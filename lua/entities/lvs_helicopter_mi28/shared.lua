@@ -162,12 +162,12 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 6500
+		bullet.Force	= 8500
 		bullet.HullSize 	= 15
-		bullet.Damage	= 28
+		bullet.Damage	= 75
 		bullet.Velocity = 12000
-		bullet.SplashDamage = 25
-		bullet.SplashDamageRadius = 1200
+		bullet.SplashDamage = 50
+		bullet.SplashDamageRadius = 350
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -212,12 +212,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 3500
+		bullet.Force	= 18000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 400
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 1300
+		bullet.SplashDamageRadius = 300
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -239,12 +239,13 @@ local weapon = {}
 		end
 		self:AddWeapon( weapon )
 	
+	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/missile.png")
-	weapon.Ammo = 10
+	weapon.Ammo = 12
 	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
 	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
-	weapon.HeatRateDown = 0.25
+	weapon.HeatRateDown = 0.3
 	weapon.Attack = function( ent )
 		local T = CurTime()
 
@@ -278,6 +279,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		projectile:SetDamage( 1200 )
+		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile
 

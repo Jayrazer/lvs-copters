@@ -124,6 +124,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		projectile:SetDamage( 800 )
+		projectile:SetRadius( 300 )
 
 		ent._Missile = projectile
 

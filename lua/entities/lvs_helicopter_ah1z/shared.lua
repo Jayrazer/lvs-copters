@@ -161,12 +161,12 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - Muzzle.Pos):GetNormalized()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 5000
+		bullet.Force	= 6500
 		bullet.HullSize 	= 15
-		bullet.Damage	= 22
-		bullet.Velocity = 15000
-		bullet.SplashDamage = 20
-		bullet.SplashDamageRadius = 100
+		bullet.Damage	= 65
+		bullet.Velocity = 12000
+		bullet.SplashDamage = 40
+		bullet.SplashDamageRadius = 200
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -213,12 +213,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 3500
+		bullet.Force	= 18000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 400
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 1300
+		bullet.SplashDamageRadius = 300
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -261,12 +261,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 9500
+		bullet.Force	= 28000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 600
 		bullet.Velocity = 3000
-		bullet.SplashDamage = 600
-		bullet.SplashDamageRadius = 2500
+		bullet.SplashDamage = 200
+		bullet.SplashDamageRadius = 250
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "weapons/stinger_fire1.wav" )
@@ -332,6 +332,8 @@ local weapon = {}
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		projectile:SetDamage( 300 ) -- these are more for air-to-air
+		projectile:SetRadius( 200 )
 
 		ent._Missile = projectile
 

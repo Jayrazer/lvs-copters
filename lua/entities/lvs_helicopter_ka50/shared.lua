@@ -139,12 +139,12 @@ local weapon = {}
 		bullet.Dir 	= (trace.HitPos - bullet.Src):GetNormalized() --ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 6500
+		bullet.Force	= 8500
 		bullet.HullSize 	= 15
-		bullet.Damage	= 25
-		bullet.Velocity = 10000
-		bullet.SplashDamage = 25
-		bullet.SplashDamageRadius = 1200
+		bullet.Damage	= 75
+		bullet.Velocity = 12000
+		bullet.SplashDamage = 50
+		bullet.SplashDamageRadius = 350
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 		local effectdata = EffectData()
@@ -184,12 +184,12 @@ local weapon = {}
 		bullet.Dir 	= ent:GetForward()
 		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
 		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 3500
+		bullet.Force	= 18000
 		bullet.HullSize 	= 15
 		bullet.Damage	= 400
 		bullet.Velocity = 6000
 		bullet.SplashDamage = 200
-		bullet.SplashDamageRadius = 1300
+		bullet.SplashDamageRadius = 300
 		bullet.Attacker 	= ent:GetDriver()
 		
 		ent:EmitSound( "npc/waste_scanner/grenade_fire.wav" )
@@ -212,54 +212,125 @@ local weapon = {}
 		self:AddWeapon( weapon )
 	
 
-	-- hellfire
-	local weapon = {}
-		weapon.Icon = Material("lvs/weapons/hellfire.png")
-	weapon.Ammo = 24
-	weapon.Delay = 0.5
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 0
+	-- -- old hellfire
+	-- local weapon = {}
+		-- weapon.Icon = Material("lvs/weapons/hellfire.png")
+	-- weapon.Ammo = 24
+	-- weapon.Delay = 0.5
+	-- weapon.HeatRateUp = 0
+	-- weapon.HeatRateDown = 0
 	
-	weapon.Attack = function( ent )
+	-- weapon.Attack = function( ent )
 
-		local pod = ent:GetDriverSeat()
-		if not IsValid( pod ) then return end
+		-- local pod = ent:GetDriverSeat()
+		-- if not IsValid( pod ) then return end
 		
-		ent.FireLeft = not ent.FireLeft
+		-- ent.FireLeft = not ent.FireLeft
 			
-		local bullet = {}
-		bullet.Src 	= ( ent:LocalToWorld( Vector(81.03,110.66 * (self.FireLeft and 1 or -1),41.45) ) )
-		bullet.Dir 	= ent:GetForward()
-		bullet.Spread 	= Vector( 0,  0.01, 0.01 )
-		bullet.TracerName = "lvs_tracer_missile"
-		bullet.Force	= 9500
-		bullet.HullSize 	= 15
-		bullet.Damage	= 600
-		bullet.Velocity = 3000
-		bullet.SplashDamage = 400
-		bullet.SplashDamageRadius = 2500
-		bullet.Attacker 	= ent:GetDriver()
+		-- local bullet = {}
+		-- bullet.Src 	= ( ent:LocalToWorld( Vector(81.03,110.66 * (self.FireLeft and 1 or -1),41.45) ) )
+		-- bullet.Dir 	= ent:GetForward()
+		-- bullet.Spread 	= Vector( 0,  0.01, 0.01 )
+		-- bullet.TracerName = "lvs_tracer_missile"
+		-- bullet.Force	= 28000
+		-- bullet.HullSize 	= 15
+		-- bullet.Damage	= 600
+		-- bullet.Velocity = 3000
+		-- bullet.SplashDamage = 200
+		-- bullet.SplashDamageRadius = 250
+		-- bullet.Attacker 	= ent:GetDriver()
 		
-		ent:EmitSound( "weapons/stinger_fire1.wav" )
+		-- ent:EmitSound( "weapons/stinger_fire1.wav" )
 		
-		bullet.Callback = function(att, tr, dmginfo)
-		local effectdata = EffectData()
-		effectdata:SetOrigin( tr.HitPos )
-		effectdata:SetNormal( tr.HitNormal )
-		util.Effect( "lvs_explosion_bomb", effectdata, true, true )
-	end
+		-- bullet.Callback = function(att, tr, dmginfo)
+		-- local effectdata = EffectData()
+		-- effectdata:SetOrigin( tr.HitPos )
+		-- effectdata:SetNormal( tr.HitNormal )
+		-- util.Effect( "lvs_explosion_bomb", effectdata, true, true )
+	-- end
 
-		ent:LVSFireBullet( bullet )
+		-- ent:LVSFireBullet( bullet )
 
-		ent:TakeAmmo( 1 )
+		-- ent:TakeAmmo( 1 )
 		
 		
-		weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
-	   -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
-		end
-		self:AddWeapon( weapon )
+		-- weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	   -- -- weapon.OnOverheat = function( ent ) ent:EmitSound("MI28_30MM_STOP") end
+		-- end
+		-- self:AddWeapon( weapon )
 		
 	
+	-- Stand-in laser guided missiles (we'll just say someone on the ground is guiding them)
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/missile.png")
+	weapon.Ammo = 20
+	weapon.Delay = 0 -- this will turn weapon.Attack to a somewhat think function
+	weapon.HeatRateUp = -0.5 -- cool down when attack key is held. This system fires on key-release.
+	weapon.HeatRateDown = 0.6
+	weapon.Attack = function( ent )
+		local T = CurTime()
+
+		if IsValid( ent._Missile ) then
+			if (ent._nextMissleTracking or 0) > T then return end
+
+			ent._nextMissleTracking = T + 0.1 -- 0.1 second interval because those find functions can be expensive
+
+			ent._Missile:FindTarget( ent:GetPos(), ent:GetForward(), 30, 7500 )
+
+			return
+		end
+
+		local T = CurTime()
+
+		if (ent._nextMissle or 0) > T then return end
+
+		ent._nextMissle = T + 0.5
+
+		ent._swapMissile = not ent._swapMissile
+
+		local Pos = Vector( 90, (ent._swapMissile and -113 or 113), 42 )
+
+		local Driver = self:GetDriver()
+
+		local projectile = ents.Create( "lvs_missile" )
+		projectile:SetPos( ent:LocalToWorld( Pos ) )
+		projectile:SetAngles( ent:LocalToWorldAngles( Angle(0,ent._swapMissile and 2 or -2,0) ) )
+		projectile:SetParent( ent )
+		projectile:Spawn()
+		projectile:Activate()
+		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
+		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
+		projectile:SetDamage( 950 )
+		projectile:SetRadius( 300 )
+
+		ent._Missile = projectile
+
+		ent:SetNextAttack( CurTime() + 0.1 ) -- wait 0.1 second before starting to track
+	end
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent._Missile ) then return end
+
+		local projectile = ent._Missile
+
+		projectile:Enable()
+		projectile:EmitSound( "weapons/stinger_fire1.wav", 125 )
+		ent:TakeAmmo()
+
+		ent._Missile = nil
+
+		local NewHeat = ent:GetHeat() + 0.75
+
+		ent:SetHeat( NewHeat )
+		if NewHeat >= 1 then
+			ent:SetOverheated( true )
+		end
+	end
+	weapon.OnSelect = function( ent ) ent:EmitSound("physics/metal/weapon_impact_soft3.wav") end
+	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
+	self:AddWeapon( weapon )
+		
+
+--bobm	
 local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bomb.png")
 	weapon.UseableByAI = false
@@ -279,8 +350,8 @@ local weapon = {}
 		projectile:SetAttacker( IsValid( Driver ) and Driver or ent )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
 		projectile:SetSpeed( ent:GetVelocity() )
-		projectile:SetDamage( 150 )
-		projectile:SetRadius( 250 )
+		projectile:SetDamage( 2500 ) -- tank killer
+		projectile:SetRadius( 500 )
 
 		self._ProjectileEntity = projectile
 	end
